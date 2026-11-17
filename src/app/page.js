@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-const PERFILES_FAMILIA = [
+const PERFILES_REGALO = [
   {
     label: 'Pareja',
     emoji: '🥂',
@@ -9,14 +9,14 @@ const PERFILES_FAMILIA = [
     ocasion: 'Aniversario',
     estilo: 'Original y sorprendente',
     presupuesto: '80',
-    intereses: 'Detalles con estilo, experiencias gastronómicas, café de especialidad o escapadas de fin de semana',
+    intereses: 'Detalles con estilo, café de especialidad, escapadas de fin de semana o accesorios elegantes',
   },
   {
     label: 'Madre',
     emoji: '🌸',
     destinatario: 'Mi madre',
     ocasion: 'Cumpleaños',
-    estilo: 'Emotivo / Sentimental',
+    estilo: 'Hogar & Decoración',
     presupuesto: '60',
     intereses: 'Bienestar personal, aromaterapia, decoración acogedora para casa, lectura o cocina creativa',
   },
@@ -30,220 +30,395 @@ const PERFILES_FAMILIA = [
     intereses: 'Accesorios prácticos con buen diseño, café o vino, bricolaje, música o paseos al aire libre',
   },
   {
-    label: 'Abuelo',
-    emoji: '📻',
-    destinatario: 'Mi abuelo',
-    ocasion: 'Cumpleaños',
-    estilo: 'Emotivo / Sentimental',
-    presupuesto: '50',
-    intereses: 'Comodidad en casa, recuerdos familiares, lectura fácil, juegos clásicos, jardinería o buenos dulces',
+    label: 'Amigo Invisible',
+    emoji: '🎲',
+    destinatario: 'Amigo Invisible',
+    ocasion: 'Amigo Invisible',
+    estilo: 'Original y sorprendente',
+    presupuesto: '25',
+    intereses: 'Juegos de mesa dinámicos, gadgets ingeniosos y útiles, café o accesorios divertidos',
   },
   {
-    label: 'Abuela',
+    label: 'Abuelo/a',
     emoji: '🫖',
-    destinatario: 'Mi abuela',
+    destinatario: 'Mis abuelos',
     ocasion: 'Detalle especial',
     estilo: 'Emotivo / Sentimental',
     presupuesto: '50',
-    intereses: 'Infusiones y repostería, álbumes de fotos familiares, mantas suaves, bienestar y detalles emotivos',
+    intereses: 'Comodidad en casa, marcos digitales con fotos familiares, infusiones, mantas suaves o lectura',
   },
   {
     label: 'Hijo / Hija',
     emoji: '🚀',
     destinatario: 'Mi hijo/a',
     ocasion: 'Cumpleaños',
-    estilo: 'Tech & Diseño',
+    estilo: 'Tech & Gadgets',
     presupuesto: '70',
-    intereses: 'Tecnología útil, creatividad, deporte, música o accesorios modernos para su habitación y día a día',
+    intereses: 'Tecnología útil, luces LED, creatividad, deporte, música o accesorios modernos para su habitación',
   },
   {
     label: 'Hermano/a',
     emoji: '🎧',
     destinatario: 'Mi hermano/a',
     ocasion: 'Cumpleaños',
-    estilo: 'Tech & Diseño',
+    estilo: 'Tech & Gadgets',
     presupuesto: '50',
     intereses: 'Gadgets originales, deporte, viajes, café o accesorios prácticos para el trabajo y ocio',
-  },
-  {
-    label: 'Primo/a',
-    emoji: '🎲',
-    destinatario: 'Mi primo/a',
-    ocasion: 'Amigo Invisible',
-    estilo: 'Original y sorprendente',
-    presupuesto: '35',
-    intereses: 'Juegos de mesa para reuniones, accesorios divertidos pero útiles, música o gadgets curiosos',
   },
   {
     label: 'Amigo/a',
     emoji: '✨',
     destinatario: 'Un buen amigo/a',
     ocasion: 'Cumpleaños',
-    estilo: 'Gourmet & Hogar',
+    estilo: 'Gourmet & Café',
     presupuesto: '45',
     intereses: 'Detalles originales con personalidad, gastronomía, deporte, viajes o decoración minimalista',
   },
 ];
 
-const OCASIONES = ['Cumpleaños', 'Aniversario', 'Navidad / Reyes', 'Amigo Invisible', 'Detalle especial'];
+const PERFILES_PARA_MI = [
+  {
+    label: 'Setup & Tech',
+    emoji: '💻',
+    destinatario: 'Mi escritorio y día a día',
+    ocasion: 'Uso diario / Productividad',
+    estilo: 'Tech & Setup',
+    presupuesto: '60',
+    intereses: 'Accesorios ergonómicos para escritorio, soporte de monitor, iluminación LED y gadgets útiles',
+  },
+  {
+    label: 'Café & Cocina',
+    emoji: '☕',
+    destinatario: 'Mi cocina y desayunos',
+    ocasion: 'Capricho práctico',
+    estilo: 'Café & Cocina',
+    presupuesto: '50',
+    intereses: 'Cafetera de especialidad, espumador de leche, accesorios de cocina duraderos y menaje con buen diseño',
+  },
+  {
+    label: 'Gym & Deporte',
+    emoji: '💪',
+    destinatario: 'Mis entrenamientos',
+    ocasion: 'Salud y rendimiento',
+    estilo: 'Gym & Salud',
+    presupuesto: '55',
+    intereses: 'Accesorios de entrenamiento, pistola de masaje muscular, botella térmica de acero y equipamiento fitness',
+  },
+  {
+    label: 'Audio & Gaming',
+    emoji: '🎧',
+    destinatario: 'Música, series y gaming',
+    ocasion: 'Uso diario / Ocio',
+    estilo: 'Audio & Gaming',
+    presupuesto: '80',
+    intereses: 'Auriculares inalámbricos con buena batería, altavoz bluetooth portátil o teclado mecánico compacto',
+  },
+  {
+    label: 'Hogar & Orden',
+    emoji: '🕯️',
+    destinatario: 'Mi salón o dormitorio',
+    ocasion: 'Confort en casa',
+    estilo: 'Hogar & Orden',
+    presupuesto: '45',
+    intereses: 'Iluminación cálida, difusor de aromas, organizadores minimalistas y accesorios de descanso',
+  },
+  {
+    label: 'Viajes & Mochila',
+    emoji: '🎒',
+    destinatario: 'Mis escapadas y desplazamientos',
+    ocasion: 'Viajes / Organización',
+    estilo: 'Viajes & Mochila',
+    presupuesto: '50',
+    intereses: 'Organizadores de maleta, batería externa compacta, mochila de cabina y accesorios de viaje',
+  },
+];
 
-const ESTILOS_REGALO = [
+const OCASIONES_REGALO = ['Cumpleaños', 'Amigo Invisible', 'Navidad / Reyes', 'Aniversario', 'Detalle especial'];
+const OCASIONES_PARA_MI = ['Uso diario / Productividad', 'Capricho práctico', 'Renovar equipo', 'Hogar y confort', 'Deporte y salud'];
+
+const CATEGORIAS_REGALO = [
   'Práctico y útil',
   'Original y sorprendente',
+  'Tech & Gadgets',
+  'Gourmet & Café',
+  'Hogar & Decoración',
+  'Deporte & Bienestar',
+  'Moda & Accesorios',
+  'Ocio & Juegos',
   'Emotivo / Sentimental',
-  'Tech & Diseño',
-  'Gourmet & Hogar',
+  'Viajes & Aventura',
+];
+
+const CATEGORIAS_PARA_MI = [
+  'Tech & Setup',
+  'Audio & Gaming',
+  'Café & Cocina',
+  'Gym & Salud',
+  'Hogar & Orden',
+  'Viajes & Mochila',
+  'Bricolaje & Herramientas',
+  'Cuidado Personal',
+  'Lectura & Estudio',
+  'Ofertas Calidad-Precio',
+];
+
+const PRIORIDADES_FILTRO = [
+  { id: 'equilibrado', label: '✨ Equilibrado (IA Concierge)' },
+  { id: 'calidad-precio', label: '💎 Máxima relación calidad-precio' },
+  { id: 'top-ventas', label: '🔥 Top ventas y más valorados' },
+  { id: 'original', label: '🎯 Diferente y poco visto' },
 ];
 
 const PRESUPUESTOS = ['25', '50', '100', '200'];
 
-const COLECCIONES_FAMILIA = [
+const COLECCIONES_DESTACADAS = [
   {
-    etiqueta: 'PARA ABUELOS',
-    titulo: 'Recuerdos, Confort & Tradición',
-    rango: '30€ – 65€',
-    descripcion: 'Marcos digitales con fotos familiares, teteras elegantes y detalles cálidos para disfrutar en casa.',
-    imagen: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=300&q=80',
+    etiqueta: 'AMIGO INVISIBLE • TOP VENTAS',
+    titulo: 'Aciertos Seguros por Menos de 30€',
+    rango: '15€ – 30€',
+    descripcion: 'Gadgets ingeniosos, juegos dinámicos y detalles útiles con los que quedas genial sin pasarte de presupuesto.',
+    icono: '🎲',
     perfil: {
-      destinatario: 'Mis abuelos',
-      ocasion: 'Navidad / Reyes',
-      estilo: 'Emotivo / Sentimental',
-      presupuesto: '60',
-      intereses: 'Les encanta ver fotos de la familia, estar cómodos en el salón, tomar té o café tranquilo y los detalles con valor sentimental',
-    },
-  },
-  {
-    etiqueta: 'PARA MADRES',
-    titulo: 'Ritual de Calma & Hogar',
-    rango: '40€ – 85€',
-    descripcion: 'Difusores de aromas, sets de cuidado personal, iluminación cálida y piezas con diseño.',
-    imagen: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=300&q=80',
-    perfil: {
-      destinatario: 'Mi madre',
-      ocasion: 'Cumpleaños',
-      estilo: 'Gourmet & Hogar',
-      presupuesto: '70',
-      intereses: 'Disfruta cuidando los detalles de casa, relajarse leyendo, las velas aromáticas, el bienestar y los accesorios elegantes',
-    },
-  },
-  {
-    etiqueta: 'PARA PADRES',
-    titulo: 'Gourmet, Café & Precisión',
-    rango: '45€ – 95€',
-    descripcion: 'Cafeteras de especialidad, accesorios de vino, herramientas compactas y audio.',
-    imagen: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=300&q=80',
-    perfil: {
-      destinatario: 'Mi padre',
-      ocasion: 'Cumpleaños',
-      estilo: 'Práctico y útil',
-      presupuesto: '80',
-      intereses: 'Le gusta el buen café por la mañana, cocinar los fines de semana, los gadgets bien construidos y las cosas duraderas',
-    },
-  },
-  {
-    etiqueta: 'HIJOS & JÓVENES',
-    titulo: 'Tech, Música & Creatividad',
-    rango: '35€ – 110€',
-    descripcion: 'Auriculares inalámbricos, luces ambientales LED, altavoces portátiles y accesorios.',
-    imagen: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=300&q=80',
-    perfil: {
-      destinatario: 'Mi hijo joven',
-      ocasion: 'Cumpleaños',
-      estilo: 'Tech & Diseño',
-      presupuesto: '90',
-      intereses: 'Le encanta escuchar música, decorar su escritorio o habitación, la tecnología práctica y el deporte',
-    },
-  },
-  {
-    etiqueta: 'PRIMOS & AMIGOS',
-    titulo: 'Planes, Juegos & Originalidad',
-    rango: '20€ – 45€',
-    descripcion: 'Juegos de mesa dinámicos, gadgets ingeniosos y regalos ideales para amigo invisible.',
-    imagen: 'https://images.unsplash.com/photo-1607344645866-009c320b63e0?auto=format&fit=crop&w=300&q=80',
-    perfil: {
-      destinatario: 'Mi primo y amigos',
+      modo: 'regalo',
+      destinatario: 'Amigo Invisible',
       ocasion: 'Amigo Invisible',
       estilo: 'Original y sorprendente',
-      presupuesto: '35',
-      intereses: 'Le gustan las reuniones con amigos, los juegos de mesa rápidos, el humor inteligente y los gadgets útiles',
+      presupuesto: '30',
+      intereses: 'Juegos de mesa rápidos, gadgets útiles y originales, accesorios de café o detalles divertidos con buen diseño',
     },
   },
   {
-    etiqueta: 'DEPORTE & ENERGÍA',
-    titulo: 'Bienestar & Entrenamiento',
-    rango: '35€ – 75€',
-    descripcion: 'Pistolas de masaje muscular, botellas térmicas de acero y accesorios fitness.',
-    imagen: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=300&q=80',
+    etiqueta: 'SETUP & PRODUCTIVIDAD',
+    titulo: 'Mejora tu Escritorio & Zona Tech',
+    rango: '35€ – 90€',
+    descripcion: 'Soportes ergonómicos, luces LED ambientales, audio limpio y accesorios para trabajar o jugar cómodo.',
+    icono: '💻',
     perfil: {
-      destinatario: 'Familiar deportista',
-      ocasion: 'Cumpleaños',
-      estilo: 'Práctico y útil',
-      presupuesto: '65',
-      intereses: 'Va al gimnasio o sale a correr, le gusta cuidarse, recuperar bien después de entrenar y los accesorios deportivos',
+      modo: 'personal',
+      destinatario: 'Mi escritorio y setup',
+      ocasion: 'Uso diario / Productividad',
+      estilo: 'Tech & Setup',
+      presupuesto: '80',
+      intereses: 'Iluminación LED de escritorio, soporte ergonómico de monitor, altavoz compacto o gadgets tech útiles',
     },
+  },
+  {
+    etiqueta: 'PARA MADRES & HOGAR',
+    titulo: 'Ritual de Calma, Café & Bienestar',
+    rango: '35€ – 75€',
+    descripcion: 'Difusores de aromas, cafeteras de especialidad, iluminación cálida y piezas acogedoras para casa.',
+    icono: '🕯️',
+    perfil: {
+      modo: 'regalo',
+      destinatario: 'Mi madre',
+      ocasion: 'Cumpleaños',
+      estilo: 'Hogar & Decoración',
+      presupuesto: '65',
+      intereses: 'Decoración cálida, aromaterapia, lectura tranquila, té o café de especialidad y bienestar personal',
+    },
+  },
+  {
+    etiqueta: 'PARA PADRES & GOURMET',
+    titulo: 'Café, Vino & Accesorios de Precisión',
+    rango: '40€ – 95€',
+    descripcion: 'Herramientas compactas bien construidas, accesorios de vino, cafeteras y audio portátil.',
+    icono: '☕',
+    perfil: {
+      modo: 'regalo',
+      destinatario: 'Mi padre',
+      ocasion: 'Cumpleaños',
+      estilo: 'Gourmet & Café',
+      presupuesto: '80',
+      intereses: 'Buen café por la mañana, accesorios de vino o cocina, herramientas prácticas y gadgets duraderos',
+    },
+  },
+];
+
+const TESTIMONIOS = [
+  {
+    nombre: 'Carlos M.',
+    etiqueta: 'Amigo Invisible • 25€',
+    texto: 'Llevaba 3 días dando vueltas en Amazon sin saber qué pillarle a un compañero de trabajo. Puse 3 aficiones suyas y me clavó un gadget que le encantó.',
+    estrellas: 5,
+  },
+  {
+    nombre: 'Laura G.',
+    etiqueta: 'Cumpleaños Madre • 60€',
+    texto: 'Me sacó ideas súper distintas a los típicos perfumes. Elegí un difusor de aromas minimalista con luz cálida y acerté de lleno.',
+    estrellas: 5,
+  },
+  {
+    nombre: 'javier_dev',
+    etiqueta: 'Compra personal • Setup',
+    texto: 'Lo usé en modo "Para mí" buscando mejorar mi escritorio por menos de 50€ y me recomendó justo dos accesorios que ni sabía que existían.',
+    estrellas: 5,
   },
 ];
 
 const PREGUNTAS_FRECUENTES = [
   {
-    pregunta: '¿Tiene algún coste utilizar RegaloIdeal?',
+    pregunta: '¿Tiene algún coste usar RegaloIdeal?',
     respuesta:
-      'No, el servicio es 100% gratuito para ti. Puedes hacer tantas búsquedas como quieras para distintos familiares o amigos sin necesidad de crear cuenta ni suscribirte. Los precios en Amazon son exactamente los mismos que si entraras por tu cuenta.',
+      'Es 100% gratuito. Puedes buscar tantos regalos o productos para ti como quieras sin registros ni suscripciones. Los precios en Amazon son exactamente los mismos que si entraras por tu cuenta.',
   },
   {
-    pregunta: '¿Cómo funciona la selección de los 4 regalos?',
+    pregunta: '¿Cómo funciona el modo "Comprar para mí"?',
     respuesta:
-      'Analizamos la relación con la persona (madre, abuelo, pareja, amigo...), su edad, la ocasión especial, el estilo que buscas y tu presupuesto máximo para filtrar propuestas concretas, originales y bien valoradas, evitando los típicos regalos aburridos.',
+      'Además de buscar regalos para otras personas, puedes activar el modo "Comprar para mí" para decirle a la IA qué necesitas mejorar (tu escritorio, tu cocina, el gimnasio, un viaje...) y tu presupuesto máximo. Te filtrará 4 opciones con alta relación calidad-precio.',
   },
   {
-    pregunta: '¿Dónde se realiza la compra, el pago y el envío?',
+    pregunta: '¿Dónde se realiza la compra y el envío?',
     respuesta:
-      'Al pulsar en "Ver en Amazon", te llevamos directamente a la tienda oficial de Amazon España. Allí puedes comparar marcas, leer opiniones de otros compradores, elegir envoltorio de regalo y disfrutar de envío rápido Prime y devolución garantizada.',
+      'Al pulsar en "Ver en Amazon", te llevamos directamente a Amazon España para que veas fotos reales, reseñas verificadas de compradores y disfrutes de envío rápido Prime y devolución oficial.',
   },
   {
-    pregunta: '¿Se guardan mis regalos favoritos si cierro la página?',
+    pregunta: '¿Se guardan mis favoritos si cierro la página?',
     respuesta:
-      'Sí. Todo lo que marques con el corazón (♡) se queda guardado automáticamente en tu navegador, incluso si cierras la pestaña o vuelves mañana desde el mismo móvil u ordenador, para que puedas comparar con calma.',
-  },
-  {
-    pregunta: '¿Puedo compartir una idea o toda mi lista por WhatsApp?',
-    respuesta:
-      'Sí. En cada recomendación tienes un botón directo de WhatsApp y otro para copiar el texto listo con el nombre del regalo, precio estimado y enlace directo, ideal si vais a hacer un regalo conjunto en familia.',
-  },
-  {
-    pregunta: '¿Los precios mostrados en las tarjetas son exactos?',
-    respuesta:
-      'Te mostramos una estimación muy aproximada ajustada al presupuesto que nos has marcado para que te hagas una idea clara antes de entrar. El precio final y las ofertas flash del día se confirman directamente en la ficha de Amazon.',
+      'Sí. Todo lo que marques con el corazón (♥) se guarda automáticamente en tu dispositivo para que puedas comparar opciones con calma o compartir tu lista por WhatsApp.',
   },
 ];
 
-function obtenerMiniaturaRegalo(titulo = '', descripcion = '', index = 0) {
-  const texto = `${titulo} ${descripcion}`.toLowerCase();
-  if (texto.includes('café') || texto.includes('cafe') || texto.includes('cafetera') || texto.includes('taza') || texto.includes('cocina') || texto.includes('vino') || texto.includes('té') || texto.includes('tetera')) {
-    return 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=300&q=80';
+// Diccionario de imágenes específicas por palabra clave exacta en el título/descripción.
+// Si ningún término encaja con precisión, devuelve imagen: null y se muestra el Logo RMM dorado.
+const BANCO_FOTOS_EXACTAS = [
+  {
+    claves: ['cafetera', 'café', 'cafe', 'espresso', 'espumador', 'molinillo'],
+    imagen: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Café & Barista',
+  },
+  {
+    claves: ['tetera', 'infusión', 'infusion', 'té ', 'matcha', 'termo', 'taza'],
+    imagen: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Té & Bebidas',
+  },
+  {
+    claves: ['vino', 'sacacorchos', 'decantador', 'copa', 'cerveza', 'coctel', 'cóctel'],
+    imagen: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Vino & Gourmet',
+  },
+  {
+    claves: ['airfryer', 'freidora', 'cocina', 'cuchillo', 'sartén', 'sarten', 'gourmet', 'tabla de queso'],
+    imagen: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Cocina & Hogar',
+  },
+  {
+    claves: ['auricular', 'cascos', 'airpods', 'earbuds'],
+    imagen: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Auriculares & Audio',
+  },
+  {
+    claves: ['altavoz', 'speaker', 'barra de sonido', 'tocadiscos', 'vinilo'],
+    imagen: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Altavoces & Música',
+  },
+  {
+    claves: ['reloj', 'smartwatch', 'pulsera de actividad', 'cronógrafo'],
+    imagen: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Relojes & Wearables',
+  },
+  {
+    claves: ['luz', 'luces', 'led', 'lámpara', 'lampara', 'rgb', 'proyector', 'tira led'],
+    imagen: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Iluminación & Ambiente',
+  },
+  {
+    claves: ['monitor', 'escritorio', 'soporte', 'teclado', 'ratón', 'raton', 'alfombrilla', 'setup', 'ordenador', 'portátil'],
+    imagen: 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Setup & Escritorio',
+  },
+  {
+    claves: ['cargador', 'batería', 'bateria', 'powerbank', 'magsafe', 'cable'],
+    imagen: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Accesorios Tech',
+  },
+  {
+    claves: ['masaje', 'pistola de masaje', 'cervical', 'relajación', 'spa'],
+    imagen: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Bienestar & Relax',
+  },
+  {
+    claves: ['gym', 'gimnasio', 'deporte', 'entrenamiento', 'mancuerna', 'fitness', 'yoga', 'correr', 'running', 'botella'],
+    imagen: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Deporte & Fitness',
+  },
+  {
+    claves: ['vela', 'difusor', 'aroma', 'aromaterapia', 'incienso', 'aceite esencial'],
+    imagen: 'https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Aromas & Calma',
+  },
+  {
+    claves: ['manta', 'cojín', 'cojin', 'almohada', 'albornoz', 'pijama', 'zapatillas de casa'],
+    imagen: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Confort & Hogar',
+  },
+  {
+    claves: ['libro', 'lectura', 'kindle', 'cuaderno', 'libreta', 'bolígrafo', 'pluma', 'diario'],
+    imagen: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Lectura & Papelería',
+  },
+  {
+    claves: ['cámara', 'camara', 'foto', 'álbum', 'album', 'marco', 'polaroid', 'instax'],
+    imagen: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Fotografía & Recuerdos',
+  },
+  {
+    claves: ['juego de mesa', 'cartas', 'ajedrez', 'puzzle', 'puzle', 'tablero', 'dado'],
+    imagen: 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Juegos & Ocio',
+  },
+  {
+    claves: ['mochila', 'viaje', 'maleta', 'neceser', 'organizador de equipaje', 'bolsa de viaje'],
+    imagen: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Viajes & Mochilas',
+  },
+  {
+    claves: ['cartera', 'tarjetero', 'gafas de sol', 'bolso', 'cinturón', 'joyero'],
+    imagen: 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Moda & Complementos',
+  },
+  {
+    claves: ['herramienta', 'destornillador', 'bricolaje', 'taladro', 'multiherramienta', 'linterna'],
+    imagen: 'https://images.unsplash.com/photo-1581147036324-c17ac41dfa6c?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Herramientas & EDC',
+  },
+  {
+    claves: ['planta', 'maceta', 'jardín', 'jardin', 'bonsái', 'bonsai', 'huerto'],
+    imagen: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Plantas & Jardín',
+  },
+  {
+    claves: ['perfume', 'colonia', 'crema', 'afeitado', 'barba', 'secador', 'skincare', 'cuidado facial'],
+    imagen: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=300&q=80',
+    categoria: 'Cuidado Personal',
+  },
+];
+
+function obtenerVisualProducto(titulo = '', descripcion = '') {
+  // Priorizamos coincidencia exacta en el título primero, y si no, en la descripción
+  const tituloLower = titulo.toLowerCase();
+  const descLower = descripcion.toLowerCase();
+
+  for (const item of BANCO_FOTOS_EXACTAS) {
+    if (item.claves.some((clave) => tituloLower.includes(clave))) {
+      return { imagen: item.imagen, categoria: item.categoria };
+    }
   }
-  if (texto.includes('gym') || texto.includes('deporte') || texto.includes('entren') || texto.includes('masaje') || texto.includes('fitness') || texto.includes('botella')) {
-    return 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=300&q=80';
+
+  for (const item of BANCO_FOTOS_EXACTAS) {
+    if (item.claves.some((clave) => descLower.includes(clave))) {
+      return { imagen: item.imagen, categoria: item.categoria };
+    }
   }
-  if (texto.includes('auricular') || texto.includes('reloj') || texto.includes('altavoz') || texto.includes('luz') || texto.includes('cámara') || texto.includes('gadget') || texto.includes('digital')) {
-    return 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=300&q=80';
-  }
-  if (texto.includes('libro') || texto.includes('lectura') || texto.includes('vela') || texto.includes('hogar') || texto.includes('manta') || texto.includes('álbum') || texto.includes('foto') || texto.includes('marco')) {
-    return 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=300&q=80';
-  }
-  const miniaturas = [
-    'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=300&q=80',
-    'https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=300&q=80',
-    'https://images.unsplash.com/photo-1607344645866-009c320b63e0?auto=format&fit=crop&w=300&q=80',
-    'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=300&q=80',
-  ];
-  return miniaturas[index % miniaturas.length];
+
+  // Si no hay foto exacta que corresponda al título, devolvemos null para mostrar el Logo RMM oficial
+  return { imagen: null, categoria: 'Selección RMM' };
 }
 
 function LogoRMM({ size = 'md' }) {
-  const dimensiones = size === 'sm' ? 'w-9 h-9' : 'w-11 h-11';
+  const dimensiones =
+    size === 'sm' ? 'w-9 h-9' : size === 'card' ? 'w-16 h-16' : 'w-11 h-11';
   return (
-    <div className={`relative ${dimensiones} rounded-xl bg-gradient-to-br from-[#F7E3B5] via-[#D4AF37] to-[#7D5C19] p-[1.5px] shadow-[0_0_25px_rgba(212,175,55,0.3)] group-hover:scale-105 transition duration-300 shrink-0`}>
+    <div className={`relative ${dimensiones} rounded-xl bg-gradient-to-br from-[#F7E3B5] via-[#D4AF37] to-[#7D5C19] p-[1.5px] shadow-[0_0_25px_rgba(212,175,55,0.28)] group-hover:scale-105 transition duration-300 shrink-0`}>
       <div className="w-full h-full rounded-[10.5px] bg-[#070A13] flex items-center justify-center relative overflow-hidden">
         <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[#E5C17B]/15 blur-sm" />
         <svg viewBox="0 0 64 64" className="w-full h-full p-1.5" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -291,13 +466,40 @@ function LogoRMM({ size = 'md' }) {
   );
 }
 
+function MiniaturaTarjeta({ titulo, descripcion }) {
+  const [errorImagen, setErrorImagen] = useState(false);
+  const visual = obtenerVisualProducto(titulo, descripcion);
+
+  if (!visual.imagen || errorImagen) {
+    return <LogoRMM size="card" />;
+  }
+
+  return (
+    <div className="w-16 h-16 rounded-2xl overflow-hidden border border-[#E5C17B]/35 bg-[#070A13] shrink-0 shadow-[0_4px_18px_rgba(0,0,0,0.5)] relative">
+      <img
+        src={visual.imagen}
+        alt={titulo}
+        onError={() => setErrorImagen(true)}
+        className="w-full h-full object-cover"
+      />
+    </div>
+  );
+}
+
 export default function Home() {
+  const [modo, setModo] = useState('regalo'); // 'regalo' | 'personal'
   const [destinatario, setDestinatario] = useState('');
   const [ocasion, setOcasion] = useState('Cumpleaños');
   const [estilo, setEstilo] = useState('Práctico y útil');
   const [presupuesto, setPresupuesto] = useState('50');
   const [intereses, setIntereses] = useState('');
   const [perfilActivo, setPerfilActivo] = useState('');
+
+  // Desplegable de filtros avanzados
+  const [mostrarFiltrosPro, setMostrarFiltrosPro] = useState(false);
+  const [prioridad, setPrioridad] = useState('equilibrado');
+  const [evitar, setEvitar] = useState('');
+
   const [regalos, setRegalos] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
   const [cargando, setCargando] = useState(false);
@@ -305,34 +507,44 @@ export default function Home() {
   const [faqAbierta, setFaqAbierta] = useState(0);
   const [mostrarSubir, setMostrarSubir] = useState(false);
 
-  // Cargar favoritos persistentes desde localStorage
+  const URL_WEB = 'https://buscador-regalos.vercel.app';
+
   useEffect(() => {
     try {
       const guardados = localStorage.getItem('rmm_regalos_favoritos');
       if (guardados) {
         setFavoritos(JSON.parse(guardados));
       }
-    } catch (e) {
-      // Ignorar si localStorage no está disponible
-    }
+    } catch (e) {}
   }, []);
 
-  // Guardar favoritos automáticamente cada vez que cambien
   useEffect(() => {
     try {
       localStorage.setItem('rmm_regalos_favoritos', JSON.stringify(favoritos));
-    } catch (e) {
-      // Ignorar errores de almacenamiento
-    }
+    } catch (e) {}
   }, [favoritos]);
 
   useEffect(() => {
     const manejarScroll = () => {
-      setMostrarSubir(window.scrollY > 280);
+      setMostrarSubir(window.scrollY > 320);
     };
     window.addEventListener('scroll', manejarScroll);
     return () => window.removeEventListener('scroll', manejarScroll);
   }, []);
+
+  const cambiarModo = (nuevoModo) => {
+    setModo(nuevoModo);
+    setPerfilActivo('');
+    setDestinatario('');
+    setIntereses('');
+    if (nuevoModo === 'personal') {
+      setOcasion('Uso diario / Productividad');
+      setEstilo('Tech & Setup');
+    } else {
+      setOcasion('Cumpleaños');
+      setEstilo('Práctico y útil');
+    }
+  };
 
   const volverAlInicio = (limpiar = false) => {
     if (limpiar) {
@@ -340,11 +552,13 @@ export default function Home() {
       setPerfilActivo('');
       setDestinatario('');
       setIntereses('');
+      setEvitar('');
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const ejecutarBusqueda = async (datos = null) => {
+    const modoActual = datos?.modo || modo;
     const dest = datos ? datos.destinatario : destinatario;
     const ocas = datos ? datos.ocasion : ocasion;
     const est = datos ? datos.estilo : estilo;
@@ -361,11 +575,23 @@ export default function Home() {
     }, 100);
 
     try {
-      const contextoCompleto = `Ocasión: ${ocas}. Enfoque/estilo deseado: ${est}. Gustos y pistas: ${inter}`;
+      const etiquetaPrioridad = PRIORIDADES_FILTRO.find((p) => p.id === prioridad)?.label || '';
+      const notaModo =
+        modoActual === 'personal'
+          ? 'MODO COMPRA PERSONAL (el usuario busca productos para sí mismo, prioriza utilidad real, durabilidad y buena relación calidad-precio).'
+          : 'MODO REGALO (el usuario busca sorprender a otra persona).';
+      const notaEvitar = evitar.trim() ? ` EVITAR estrictamente: ${evitar.trim()}.` : '';
+
+      const contextoCompleto = `${notaModo} Motivo/Ocasión: ${ocas}. Categoría/Enfoque: ${est}. Prioridad: ${etiquetaPrioridad}. Detalles y preferencias: ${inter}.${notaEvitar}`;
+
       const res = await fetch('/api/recomendar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ destinatario: dest, presupuesto: pres, intereses: contextoCompleto }),
+        body: JSON.stringify({
+          destinatario: dest,
+          presupuesto: pres,
+          intereses: contextoCompleto,
+        }),
       });
       const data = await res.json();
       if (data.regalos) {
@@ -395,6 +621,7 @@ export default function Home() {
   };
 
   const probarColeccion = (perfil) => {
+    if (perfil.modo) setModo(perfil.modo);
     setPerfilActivo('');
     setDestinatario(perfil.destinatario);
     setOcasion(perfil.ocasion);
@@ -413,8 +640,9 @@ export default function Home() {
     }
   };
 
+  // Compartir 100% legal según normativa Amazon Associates (enlace a tu dominio propio)
   const compartirRegalo = (regalo, id) => {
-    const texto = `Mira esta idea de regalo para ${destinatario || 'ti'} 🎁\n*${regalo.titulo}* (${regalo.precioEstimado})\n${regalo.descripcion}\nVer en Amazon: ${regalo.urlAmazon}`;
+    const texto = `Mira esta idea que he encontrado en RegaloIdeal 🎁:\n*${regalo.titulo}* (${regalo.precioEstimado})\n${regalo.descripcion}\n\nDescúbrelo y busca más ideas aquí 👉 ${URL_WEB}`;
     navigator.clipboard.writeText(texto);
     setCopiado(id);
     setTimeout(() => setCopiado(null), 2200);
@@ -422,35 +650,41 @@ export default function Home() {
 
   const abrirWhatsAppRegalo = (regalo) => {
     const mensaje = encodeURIComponent(
-      `¡Mira esta idea de regalo! 🎁\n*${regalo.titulo}* (${regalo.precioEstimado})\n${regalo.descripcion}\nVer en Amazon: ${regalo.urlAmazon}`
+      `¡Mira esta idea que me ha sacado esta IA! 🎁\n*${regalo.titulo}* (${regalo.precioEstimado})\n${regalo.descripcion}\n\nPruébalo aquí para buscar más ideas 👇\n${URL_WEB}`
     );
     window.open(`https://wa.me/?text=${mensaje}`, '_blank', 'noopener,noreferrer');
   };
 
   const abrirWhatsAppListaFavoritos = () => {
     const items = favoritos
-      .map((f, idx) => `${idx + 1}. *${f.titulo}* (${f.precioEstimado})\n👉 ${f.urlAmazon}`)
-      .join('\n\n');
-    const mensaje = encodeURIComponent(`Esta es mi selección de ideas de regalo en RegaloIdeal 🎁:\n\n${items}`);
+      .map((f, idx) => `${idx + 1}. *${f.titulo}* (${f.precioEstimado})`)
+      .join('\n');
+    const mensaje = encodeURIComponent(
+      `Esta es mi lista de ideas favoritas en RegaloIdeal 🎁:\n\n${items}\n\nEntra aquí para verlas y buscar más 👇\n${URL_WEB}`
+    );
     window.open(`https://wa.me/?text=${mensaje}`, '_blank', 'noopener,noreferrer');
   };
 
+  const perfilesActuales = modo === 'regalo' ? PERFILES_REGALO : PERFILES_PARA_MI;
+  const ocasionesActuales = modo === 'regalo' ? OCASIONES_REGALO : OCASIONES_PARA_MI;
+  const categoriasActuales = modo === 'regalo' ? CATEGORIAS_REGALO : CATEGORIAS_PARA_MI;
+
   return (
-    <div id="inicio" className="min-h-screen bg-[#05070E] text-[#F4F1EA] flex flex-col relative overflow-x-hidden pb-24 sm:pb-0 selection:bg-[#E5C17B]/30 selection:text-[#F7E3B5]">
-      {/* RESPLANDOR DE LUJO SUTIL */}
+    <div id="inicio" className="min-h-screen bg-[#05070E] text-[#F4F1EA] flex flex-col relative overflow-x-hidden pb-20 sm:pb-0 selection:bg-[#E5C17B]/30 selection:text-[#F7E3B5]">
+      {/* RESPLANDOR AMBIENTAL DORADO */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -top-48 left-1/2 -translate-x-1/2 w-[680px] h-[380px] rounded-full bg-[#D4AF37]/[0.09] blur-[140px]" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-[#9E7B3A]/[0.06] blur-[140px]" />
       </div>
 
-      {/* BARRA SUPERIOR CONCIERGE */}
+      {/* BARRA SUPERIOR */}
       <div className="relative z-20 bg-[#0A0E1A] border-b border-[#E5C17B]/15 py-1.5 px-4 text-center">
         <p className="text-[10px] sm:text-xs tracking-[0.16em] uppercase text-[#E5C17B]/90 font-medium">
-          RMM Gift Concierge • Selección Oficial en Amazon España
+          RMM Smart Concierge • Buscador con IA para Regalos & Compras en Amazon España
         </p>
       </div>
 
-      {/* NAVBAR FIJA EN TODO MOMENTO CON LOGO RMM Y BOTÓN HOME */}
+      {/* NAVBAR FIJA */}
       <header className="sticky top-0 z-50 backdrop-blur-2xl bg-[#05070E]/90 border-b border-white/[0.07] shadow-[0_8px_30px_rgba(0,0,0,0.45)]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-[68px] flex items-center justify-between">
           <button
@@ -465,11 +699,11 @@ export default function Home() {
                   Regalo<span className="text-[#E5C17B]">Ideal</span>
                 </span>
                 <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#E5C17B]/15 text-[#E5C17B] border border-[#E5C17B]/30">
-                  RMM
+                  AI
                 </span>
               </div>
               <span className="text-[10px] tracking-[0.12em] text-slate-400 mt-1">
-                Raúl Martín Martos
+                Regalos & Compras Inteligentes
               </span>
             </div>
           </button>
@@ -478,75 +712,111 @@ export default function Home() {
             <button
               type="button"
               onClick={() => volverAlInicio(false)}
-              className="text-[#E5C17B] hover:text-white transition flex items-center gap-1.5 font-bold cursor-pointer"
+              className="text-[#E5C17B] hover:text-white transition font-bold cursor-pointer"
             >
-              <span>⌂</span> Home
+              Buscador
             </button>
-            <a href="#colecciones" className="hover:text-[#E5C17B] transition">Por familiar</a>
-            <a href="#metodo" className="hover:text-[#E5C17B] transition">Método</a>
-            <a href="#faq" className="hover:text-[#E5C17B] transition">Preguntas</a>
+            <a href="#colecciones" className="hover:text-[#E5C17B] transition">Colecciones</a>
+            <a href="#opiniones" className="hover:text-[#E5C17B] transition">Opiniones</a>
+            <a href="#faq" className="hover:text-[#E5C17B] transition">Ayuda</a>
           </nav>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => volverAlInicio(false)}
-              title="Volver arriba al inicio"
-              className="flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-full bg-gradient-to-r from-[#F7E3B5]/15 to-[#D4AF37]/15 hover:from-[#F7E3B5] hover:to-[#D4AF37] text-[#F7E3B5] hover:text-[#05070E] border border-[#E5C17B]/35 transition cursor-pointer"
-            >
-              <span className="text-sm leading-none">⌂</span>
-              <span>Home</span>
-            </button>
-
             {favoritos.length > 0 && (
               <a
                 href="#favoritos"
-                className="flex items-center gap-1 text-xs font-bold px-3 py-2 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/35 transition"
+                className="flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-full bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/35 transition"
               >
                 <span>♥</span>
-                <span>{favoritos.length}</span>
+                <span>Guardados ({favoritos.length})</span>
               </a>
             )}
+            <button
+              type="button"
+              onClick={() => volverAlInicio(true)}
+              title="Nueva búsqueda"
+              className="flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-full bg-gradient-to-r from-[#F7E3B5]/15 to-[#D4AF37]/15 hover:from-[#F7E3B5] hover:to-[#D4AF37] text-[#F7E3B5] hover:text-[#05070E] border border-[#E5C17B]/35 transition cursor-pointer"
+            >
+              <span>✦</span>
+              <span>Nueva</span>
+            </button>
           </div>
         </div>
       </header>
 
       <main className="relative z-10 flex-1">
-        {/* HERO COMPACTO MOBILE-FIRST */}
-        <section id="buscador" className="max-w-4xl mx-auto px-4 sm:px-6 pt-8 sm:pt-14 pb-14">
-          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-[#E5C17B]/25 text-[11px] uppercase tracking-[0.15em] text-[#E5C17B] font-semibold mb-4">
-              ✦ Para padres, abuelos, hijos, primos y amigos
+        {/* HERO + SELECTOR DUAL REGALO / PARA MÍ */}
+        <section id="buscador" className="max-w-4xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12 pb-14">
+          <div className="text-center max-w-2xl mx-auto mb-7 sm:mb-9">
+            {/* SWITCH DUAL DE MODO */}
+            <div className="inline-flex p-1 rounded-2xl bg-[#0B0F1C] border border-[#E5C17B]/25 shadow-lg mb-5">
+              <button
+                type="button"
+                onClick={() => cambiarModo('regalo')}
+                className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
+                  modo === 'regalo'
+                    ? 'bg-gradient-to-r from-[#F7E3B5] to-[#D4AF37] text-[#05070E] shadow-[0_4px_20px_rgba(212,175,55,0.28)]'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>🎁</span>
+                <span>Buscar Regalo</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => cambiarModo('personal')}
+                className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
+                  modo === 'personal'
+                    ? 'bg-gradient-to-r from-[#F7E3B5] to-[#D4AF37] text-[#05070E] shadow-[0_4px_20px_rgba(212,175,55,0.28)]'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>🛍️</span>
+                <span>Comprar para mí</span>
+              </button>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.12] mb-4 text-white">
-              El arte de acertar con{' '}
-              <span className="bg-gradient-to-r from-[#F7E3B5] via-[#E5C17B] to-[#C69749] bg-clip-text text-transparent">
-                quienes más quieres
-              </span>
+            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.12] mb-3.5 text-white">
+              {modo === 'regalo' ? (
+                <>
+                  El arte de acertar con{' '}
+                  <span className="bg-gradient-to-r from-[#F7E3B5] via-[#E5C17B] to-[#C69749] bg-clip-text text-transparent">
+                    quienes más quieres
+                  </span>
+                </>
+              ) : (
+                <>
+                  Encuentra lo mejor para ti{' '}
+                  <span className="bg-gradient-to-r from-[#F7E3B5] via-[#E5C17B] to-[#C69749] bg-clip-text text-transparent">
+                    sin perder horas
+                  </span>
+                </>
+              )}
             </h1>
 
             <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-              Elige a quién quieres sorprender y descubre al instante 4 ideas con personalidad, disponibles en Amazon España y ajustadas a tu presupuesto.
+              {modo === 'regalo'
+                ? 'Indica para quién es, sus gustos y tu presupuesto. Nuestra IA selecciona 4 regalos top disponibles en Amazon España.'
+                : 'Dinos qué necesitas, para qué lo vas a usar y cuánto quieres gastar. Filtramos 4 opciones calidad-precio en Amazon España.'}
             </p>
           </div>
 
-          {/* PANEL DE BÚSQUEDA DE LUJO */}
+          {/* PANEL DE BÚSQUEDA */}
           <form
             onSubmit={handleSubmit}
             className="bg-[#0B0F1C]/95 backdrop-blur-xl p-5 sm:p-8 rounded-3xl border border-[#E5C17B]/20 shadow-[0_25px_80px_rgba(0,0,0,0.75)] space-y-6"
           >
-            {/* Selector táctil horizontal de familiares y amigos */}
+            {/* Perfiles rápidos */}
             <div>
               <div className="flex items-center justify-between mb-2.5">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400">
-                  Elige un perfil rápido (toca para rellenar)
+                  {modo === 'regalo' ? 'Perfiles rápidos (toca para rellenar)' : 'Categorías rápidas (toca para rellenar)'}
                 </span>
                 <span className="text-[10px] text-slate-500 sm:hidden">Desliza →</span>
               </div>
 
               <div className="flex sm:flex-wrap gap-2 overflow-x-auto pb-1.5 sm:pb-0">
-                {PERFILES_FAMILIA.map((p) => {
+                {perfilesActuales.map((p) => {
                   const seleccionado = perfilActivo === p.label;
                   return (
                     <button
@@ -567,13 +837,13 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Ocasión */}
+            {/* Motivo / Ocasión */}
             <div>
               <label className="block text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400 mb-2.5">
-                1. Ocasión
+                {modo === 'regalo' ? '1. Ocasión' : '1. Objetivo de compra'}
               </label>
               <div className="flex flex-wrap gap-2">
-                {OCASIONES.map((item) => (
+                {ocasionesActuales.map((item) => (
                   <button
                     key={item}
                     type="button"
@@ -590,13 +860,13 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Estilo del regalo */}
+            {/* Categoría / Enfoque ampliado (10 opciones) */}
             <div>
               <label className="block text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400 mb-2.5">
-                2. Enfoque del regalo
+                {modo === 'regalo' ? '2. Categoría / Enfoque del regalo' : '2. Categoría del producto'}
               </label>
               <div className="flex flex-wrap gap-2">
-                {ESTILOS_REGALO.map((item) => (
+                {categoriasActuales.map((item) => (
                   <button
                     key={item}
                     type="button"
@@ -613,16 +883,20 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Destinatario + Control deslizante de presupuesto */}
+            {/* Destinatario/Uso + Presupuesto */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
                 <label className="block text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400 mb-2">
-                  3. ¿Para quién es? (puedes detallar edad)
+                  {modo === 'regalo' ? '3. ¿Para quién es? (puedes detallar edad)' : '3. ¿Qué buscas o para qué zona es?'}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="Ej: Mi abuelo de 78 años, mi hijo de 16, mi prima..."
+                  placeholder={
+                    modo === 'regalo'
+                      ? 'Ej: Mi abuelo de 78 años, mi compañero de amigo invisible...'
+                      : 'Ej: Mejorar mi escritorio, hacer café en casa, entrenar...'
+                  }
                   value={destinatario}
                   onChange={(e) => {
                     setDestinatario(e.target.value);
@@ -672,19 +946,77 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Gustos */}
+            {/* Gustos / Especificaciones */}
             <div>
               <label className="block text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400 mb-2">
-                5. Sus aficiones, estilo o pistas clave
+                {modo === 'regalo' ? '5. Sus aficiones, estilo o pistas clave' : '5. Características o qué problema quieres resolver'}
               </label>
               <textarea
                 required
                 rows="3"
-                placeholder="Ej: A mi abuela le encanta tomar infusiones por la tarde, ver fotos de los nietos y estar calentita leyendo en el sofá..."
+                placeholder={
+                  modo === 'regalo'
+                    ? 'Ej: Le encanta el café, ver series, salir a correr y las cosas minimalistas...'
+                    : 'Ej: Quiero auriculares inalámbricos cómodos para trabajar, con buena batería y cancelación de ruido...'
+                }
                 value={intereses}
                 onChange={(e) => setIntereses(e.target.value)}
                 className="w-full p-3.5 rounded-xl bg-[#060811] border border-white/10 focus:border-[#E5C17B] focus:ring-1 focus:ring-[#E5C17B]/40 outline-none transition text-sm text-white placeholder:text-slate-600"
               />
+            </div>
+
+            {/* DESPLEGABLE DE FILTROS AVANZADOS PRO */}
+            <div className="border-t border-white/[0.07] pt-3">
+              <button
+                type="button"
+                onClick={() => setMostrarFiltrosPro(!mostrarFiltrosPro)}
+                className="flex items-center justify-between w-full text-left text-xs font-semibold text-slate-400 hover:text-[#E5C17B] transition py-1 cursor-pointer"
+              >
+                <span className="flex items-center gap-2">
+                  <span>⚙️</span>
+                  <span>Filtros avanzados (Prioridad y exclusiones)</span>
+                  {(prioridad !== 'equilibrado' || evitar.trim()) && (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] bg-[#E5C17B]/20 text-[#E5C17B]">
+                      Activo
+                    </span>
+                  )}
+                </span>
+                <span className="text-sm">{mostrarFiltrosPro ? '▲' : '▼'}</span>
+              </button>
+
+              {mostrarFiltrosPro && (
+                <div className="mt-3 p-4 rounded-2xl bg-[#060811] border border-white/[0.07] grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                      Criterio de selección IA
+                    </label>
+                    <select
+                      value={prioridad}
+                      onChange={(e) => setPrioridad(e.target.value)}
+                      className="w-full p-2.5 rounded-xl bg-[#0B0F1C] border border-white/10 text-xs text-white outline-none focus:border-[#E5C17B]"
+                    >
+                      {PRIORIDADES_FILTRO.map((p) => (
+                        <option key={p.id} value={p.id}>
+                          {p.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                      Evitar (opcional)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Ej: Ropa, colonias, tazas, libros..."
+                      value={evitar}
+                      onChange={(e) => setEvitar(e.target.value)}
+                      className="w-full p-2.5 rounded-xl bg-[#0B0F1C] border border-white/10 text-xs text-white placeholder:text-slate-600 outline-none focus:border-[#E5C17B]"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             <button
@@ -692,20 +1024,24 @@ export default function Home() {
               disabled={cargando}
               className="w-full py-4 rounded-2xl font-extrabold text-sm sm:text-base uppercase tracking-wider bg-gradient-to-r from-[#F7E3B5] via-[#E5C17B] to-[#C69749] text-[#05070E] hover:brightness-110 active:scale-[0.99] transition shadow-[0_10px_35px_rgba(212,175,55,0.28)] disabled:opacity-50 cursor-pointer"
             >
-              {cargando ? '✦ Preparando tu selección privada...' : 'Revelar 4 Ideas Exclusivas →'}
+              {cargando
+                ? '✦ Analizando catálogo de Amazon...'
+                : modo === 'regalo'
+                ? 'Revelar 4 Ideas Exclusivas →'
+                : 'Encontrar Mis 4 Mejores Opciones →'}
             </button>
           </form>
 
-          {/* ZONA DE RESULTADOS CON MINIATURAS COMPACTAS Y WHATSAPP DIRECTO */}
+          {/* ZONA DE RESULTADOS */}
           <div id="zona-resultados" className="scroll-mt-24">
             {cargando && (
               <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                 {[1, 2, 3, 4].map((n) => (
                   <div key={n} className="bg-[#0B0F1C] border border-white/10 p-5 rounded-2xl animate-pulse space-y-4">
                     <div className="flex gap-3.5 items-center">
-                      <div className="w-16 h-16 rounded-xl bg-slate-800 shrink-0" />
+                      <div className="w-16 h-16 rounded-2xl bg-slate-800 shrink-0" />
                       <div className="flex-1 space-y-2">
-                        <div className="h-3 bg-slate-800 rounded w-20" />
+                        <div className="h-3 bg-slate-800 rounded w-24" />
                         <div className="h-5 bg-slate-800 rounded w-4/5" />
                       </div>
                     </div>
@@ -713,7 +1049,7 @@ export default function Home() {
                       <div className="h-3 bg-slate-800/80 rounded w-full" />
                       <div className="h-3 bg-slate-800/80 rounded w-5/6" />
                     </div>
-                    <div className="h-10 bg-slate-800 rounded-xl w-full" />
+                    <div className="h-11 bg-slate-800 rounded-xl w-full" />
                   </div>
                 ))}
               </div>
@@ -723,110 +1059,114 @@ export default function Home() {
               <section className="mt-14">
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-4 border-b border-white/10">
                   <div>
-                    <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#E5C17B]">
-                      Selección privada • {estilo}
+                    <span className="text-[11px] uppercase tracking-[0.16em] text-[#E5C17B] font-bold">
+                      ✦ Selección personalizada lista
                     </span>
-                    <h2 className="text-xl sm:text-2xl font-extrabold text-white mt-0.5">
-                      Curaduría para {destinatario}
+                    <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
+                      4 Opciones Top en Amazon España
                     </h2>
                   </div>
 
-                  <div className="flex items-center gap-2 self-start sm:self-auto">
-                    <span className="text-xs font-medium bg-[#E5C17B]/10 text-[#E5C17B] border border-[#E5C17B]/25 px-3 py-1 rounded-full">
-                      Máx. {presupuesto}€
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => volverAlInicio(true)}
-                      className="text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-slate-200 border border-white/10 px-3 py-1 rounded-full transition cursor-pointer"
-                    >
-                      ⌂ Nueva búsqueda
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => ejecutarBusqueda()}
+                    className="self-start sm:self-auto text-xs font-bold px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-[#E5C17B]/15 text-[#E5C17B] border border-[#E5C17B]/30 transition cursor-pointer"
+                  >
+                    ↻ Generar otras 4 ideas
+                  </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-                  {regalos.map((regalo, i) => {
-                    const esFav = favoritos.some((f) => f.titulo === regalo.titulo);
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {regalos.map((regalo, idx) => {
+                    const esFavorito = favoritos.some((f) => f.titulo === regalo.titulo);
+                    const visual = obtenerVisualProducto(regalo.titulo, regalo.descripcion);
+                    const esDestacado = idx === 0;
+
                     return (
                       <article
-                        key={i}
-                        className="group bg-[#0B0F1C] border border-white/10 hover:border-[#E5C17B]/50 p-5 rounded-2xl flex flex-col justify-between transition duration-300 shadow-xl"
+                        key={idx}
+                        className={`relative flex flex-col justify-between p-5 sm:p-6 rounded-3xl bg-[#0B0F1C] border transition duration-300 ${
+                          esDestacado
+                            ? 'border-[#E5C17B]/55 shadow-[0_12px_40px_rgba(212,175,55,0.12)]'
+                            : 'border-white/[0.09] hover:border-[#E5C17B]/35'
+                        }`}
                       >
                         <div>
-                          <div className="flex items-start gap-3.5 mb-3.5">
-                            <div className="relative w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-xl overflow-hidden border border-white/10 shrink-0 bg-slate-900">
-                              <img
-                                src={obtenerMiniaturaRegalo(regalo.titulo, regalo.descripcion, i)}
-                                alt={regalo.titulo}
-                                className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                              />
-                            </div>
+                          {/* Cabecera con Foto Exacta al Título o Logo RMM Dorado */}
+                          <div className="flex items-start gap-3.5 mb-4">
+                            <MiniaturaTarjeta
+                              titulo={regalo.titulo}
+                              descripcion={regalo.descripcion}
+                            />
 
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between gap-2 mb-1">
-                                <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#E5C17B]">
-                                  {i === 0 ? '✦ Elección destacada' : `Selección #${i + 1}`}
+                                <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#E5C17B] truncate">
+                                  {esDestacado ? '✦ Elección Destacada' : `#${idx + 1} • ${visual.categoria}`}
                                 </span>
-                                <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full shrink-0">
+                                <span className="shrink-0 text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
                                   {regalo.precioEstimado}
                                 </span>
                               </div>
 
-                              <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-[#F7E3B5] transition leading-snug">
+                              <h3 className="text-base sm:text-lg font-extrabold text-white leading-snug">
                                 {regalo.titulo}
                               </h3>
                             </div>
                           </div>
 
-                          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-3.5">
+                          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
                             {regalo.descripcion}
                           </p>
-
-                          <div className="flex items-center gap-3 text-[11px] text-slate-400 mb-4">
-                            <span className="text-emerald-400/90">✓ Envío rápido Amazon</span>
-                            <span>•</span>
-                            <span>Ajustado a {ocasion}</span>
-                          </div>
                         </div>
 
-                        <div className="flex items-center gap-2 pt-2.5 border-t border-white/[0.06]">
-                          <a
-                            href={regalo.urlAmazon}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 text-center py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#F7E3B5] via-[#E5C17B] to-[#C69749] text-[#05070E] font-extrabold text-xs sm:text-sm hover:brightness-110 transition"
-                          >
-                            Ver en Amazon →
-                          </a>
-                          <button
-                            type="button"
-                            onClick={() => toggleFavorito(regalo)}
-                            title="Guardar en favoritos"
-                            className={`px-3 py-2.5 rounded-xl border transition text-sm cursor-pointer ${
-                              esFav
-                                ? 'bg-rose-500/15 border-rose-500/40 text-rose-400'
-                                : 'bg-white/[0.04] hover:bg-white/[0.1] border-white/10 text-slate-300'
-                            }`}
-                          >
-                            {esFav ? '♥' : '♡'}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => abrirWhatsAppRegalo(regalo)}
-                            title="Enviar por WhatsApp"
-                            className="px-3 py-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/25 transition text-xs font-semibold cursor-pointer"
-                          >
-                            WA
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => compartirRegalo(regalo, `res-${i}`)}
-                            title="Copiar enlace"
-                            className="px-2.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.1] text-slate-300 border border-white/10 transition text-xs cursor-pointer"
-                          >
-                            {copiado === `res-${i}` ? '✓' : '📋'}
-                          </button>
+                        <div className="pt-3 border-t border-white/[0.06] space-y-3">
+                          <div className="flex items-center justify-between text-[11px] text-slate-400">
+                            <span className="text-emerald-400 font-medium">✓ Disponible en Amazon.es</span>
+                            <span>Ajustado a ≤ {presupuesto}€</span>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <a
+                              href={regalo.urlAmazon}
+                              target="_blank"
+                              rel="noopener noreferrer nofollow sponsored"
+                              className="flex-1 py-3 px-4 rounded-xl font-extrabold text-xs sm:text-sm text-center bg-gradient-to-r from-[#F7E3B5] via-[#E5C17B] to-[#C69749] text-[#05070E] hover:brightness-110 transition shadow-[0_6px_20px_rgba(212,175,55,0.22)]"
+                            >
+                              Ver en Amazon →
+                            </a>
+
+                            <button
+                              type="button"
+                              onClick={() => toggleFavorito(regalo)}
+                              title="Guardar en favoritos"
+                              className={`p-3 rounded-xl border text-sm transition cursor-pointer ${
+                                esFavorito
+                                  ? 'bg-rose-500/20 border-rose-500/50 text-rose-300'
+                                  : 'bg-white/[0.04] border-white/10 text-slate-300 hover:border-[#E5C17B]/40'
+                              }`}
+                            >
+                              {esFavorito ? '♥' : '♡'}
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => abrirWhatsAppRegalo(regalo)}
+                              title="Compartir idea por WhatsApp"
+                              className="px-3 py-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 text-emerald-300 text-xs font-extrabold transition cursor-pointer"
+                            >
+                              WA
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => compartirRegalo(regalo, idx)}
+                              title="Copiar recomendación"
+                              className="p-3 rounded-xl bg-white/[0.04] hover:bg-white/10 border border-white/10 text-slate-300 text-xs transition cursor-pointer"
+                            >
+                              {copiado === idx ? '✓' : '📋'}
+                            </button>
+                          </div>
                         </div>
                       </article>
                     );
@@ -835,54 +1175,53 @@ export default function Home() {
               </section>
             )}
           </div>
+        </section>
 
-          {/* BANDEJA DE FAVORITOS PERSISTENTES */}
-          {favoritos.length > 0 && (
-            <section id="favoritos" className="mt-14 p-5 sm:p-6 rounded-2xl bg-[#0B0F1C]/90 border border-[#E5C17B]/30 scroll-mt-24">
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-                <h3 className="text-sm sm:text-base font-bold text-[#E5C17B] flex items-center gap-2">
-                  <span>♥</span> Tus regalos guardados ({favoritos.length})
-                </h3>
-                <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={abrirWhatsAppListaFavoritos}
-                    className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition cursor-pointer"
-                  >
-                    Compartir lista por WhatsApp
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFavoritos([])}
-                    className="text-xs text-slate-400 hover:text-white cursor-pointer"
-                  >
-                    Limpiar
-                  </button>
+        {/* FAVORITOS GUARDADOS */}
+        {favoritos.length > 0 && (
+          <section id="favoritos" className="max-w-4xl mx-auto px-4 sm:px-6 pb-16 scroll-mt-24">
+            <div className="p-6 sm:p-8 rounded-3xl bg-[#0B0F1C] border border-rose-500/25">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                <div>
+                  <span className="text-[11px] uppercase tracking-[0.15em] text-rose-300 font-bold">
+                    ♥ Tu selección guardada
+                  </span>
+                  <h2 className="text-xl sm:text-2xl font-extrabold text-white mt-0.5">
+                    Favoritos ({favoritos.length})
+                  </h2>
                 </div>
+                <button
+                  type="button"
+                  onClick={abrirWhatsAppListaFavoritos}
+                  className="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-extrabold transition cursor-pointer"
+                >
+                  Compartir lista por WhatsApp
+                </button>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {favoritos.map((fav, idx) => (
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                {favoritos.map((fav, i) => (
                   <div
-                    key={idx}
-                    className="flex items-center justify-between gap-3 p-3 rounded-xl bg-[#060811] border border-white/10"
+                    key={i}
+                    className="p-4 rounded-2xl bg-[#060811] border border-white/10 flex items-center justify-between gap-3"
                   >
                     <div className="min-w-0">
-                      <p className="text-xs sm:text-sm font-bold text-white truncate">{fav.titulo}</p>
-                      <p className="text-xs text-emerald-400">{fav.precioEstimado}</p>
+                      <p className="text-sm font-bold text-white truncate">{fav.titulo}</p>
+                      <p className="text-xs text-[#E5C17B] font-semibold mt-0.5">{fav.precioEstimado}</p>
                     </div>
-                    <div className="flex items-center gap-1.5 shrink-0">
+                    <div className="flex items-center gap-2 shrink-0">
                       <a
                         href={fav.urlAmazon}
                         target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs font-bold px-3 py-1.5 rounded-lg bg-[#E5C17B] text-[#05070E]"
+                        rel="noopener noreferrer nofollow sponsored"
+                        className="px-3 py-2 rounded-lg bg-[#E5C17B] text-[#05070E] text-xs font-extrabold hover:brightness-110 transition"
                       >
-                        Amazon
+                        Amazon →
                       </a>
                       <button
                         type="button"
                         onClick={() => toggleFavorito(fav)}
-                        className="text-xs px-2 py-1.5 text-slate-400 hover:text-rose-400 cursor-pointer"
+                        className="p-2 rounded-lg bg-white/5 text-slate-400 hover:text-rose-400 text-xs cursor-pointer"
                       >
                         ✕
                       </button>
@@ -890,97 +1229,113 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-            </section>
-          )}
-        </section>
-
-        {/* COLECCIONES CURADAS POR FAMILIAR */}
-        <section id="colecciones" className="max-w-5xl mx-auto px-4 sm:px-6 py-14 border-t border-white/[0.06] scroll-mt-20">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-2">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#E5C17B]">
-                Guía por familiar y ocasión
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
-                Colecciones listas para inspirarte
-              </h2>
             </div>
-            <p className="text-xs text-slate-400">
-              Toca cualquier colección para ver 4 propuestas reales al instante
+          </section>
+        )}
+
+        {/* COLECCIONES RÁPIDAS */}
+        <section id="colecciones" className="max-w-5xl mx-auto px-4 sm:px-6 py-14 border-t border-white/[0.06] scroll-mt-20">
+          <div className="text-center max-w-xl mx-auto mb-10">
+            <span className="text-[11px] uppercase tracking-[0.16em] text-[#E5C17B] font-bold">
+              ✦ Inspiración en 1 clic
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1.5">
+              Búsquedas Populares del Momento
+            </h2>
+            <p className="text-slate-400 text-xs sm:text-sm mt-2">
+              Pulsa en cualquier colección para lanzar automáticamente la búsqueda con IA.
             </p>
           </div>
 
-          <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto pb-4 md:pb-0 snap-x snap-mandatory">
-            {COLECCIONES_FAMILIA.map((col, idx) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {COLECCIONES_DESTACADAS.map((col, idx) => (
               <div
                 key={idx}
-                className="min-w-[270px] sm:min-w-[295px] md:min-w-0 snap-start bg-[#0B0F1C] border border-white/[0.08] hover:border-[#E5C17B]/40 p-5 rounded-2xl flex flex-col justify-between transition"
+                className="p-6 rounded-3xl bg-[#0B0F1C] border border-white/[0.08] hover:border-[#E5C17B]/40 transition flex flex-col justify-between gap-5"
               >
                 <div>
-                  <div className="flex items-center gap-3.5 mb-4">
-                    <img
-                      src={col.imagen}
-                      alt={col.titulo}
-                      className="w-14 h-14 rounded-xl object-cover border border-white/10 shrink-0"
-                    />
-                    <div>
-                      <span className="text-[10px] font-bold tracking-[0.15em] text-[#E5C17B] block">
-                        {col.etiqueta}
-                      </span>
-                      <span className="text-xs text-slate-400">{col.rango}</span>
-                    </div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#E5C17B]">
+                      {col.etiqueta}
+                    </span>
+                    <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-white/[0.05] text-slate-300">
+                      {col.rango}
+                    </span>
                   </div>
-                  <h3 className="font-bold text-white text-base mb-1.5">{col.titulo}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed mb-5">{col.descripcion}</p>
+
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-2xl">{col.icono}</span>
+                    <h3 className="text-lg font-extrabold text-white">{col.titulo}</h3>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                    {col.descripcion}
+                  </p>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => probarColeccion(col.perfil)}
-                  className="w-full py-2.5 px-4 rounded-xl bg-white/[0.04] hover:bg-[#E5C17B] hover:text-[#05070E] text-[#E5C17B] font-semibold text-xs border border-[#E5C17B]/25 transition cursor-pointer"
+                  className="w-full py-3 rounded-xl text-xs font-extrabold uppercase tracking-wider bg-white/[0.04] hover:bg-[#E5C17B] text-[#F7E3B5] hover:text-[#05070E] border border-[#E5C17B]/30 transition cursor-pointer"
                 >
-                  Probar esta colección →
+                  Explorar esta selección →
                 </button>
               </div>
             ))}
           </div>
         </section>
 
-        {/* MÉTODO CONCIERGE */}
-        <section id="metodo" className="max-w-5xl mx-auto px-4 sm:px-6 py-14 border-t border-white/[0.06] scroll-mt-20">
+        {/* OPINIONES / PRUEBA SOCIAL */}
+        <section id="opiniones" className="max-w-5xl mx-auto px-4 sm:px-6 py-14 border-t border-white/[0.06] scroll-mt-20">
+          <div className="text-center max-w-xl mx-auto mb-10">
+            <span className="text-[11px] uppercase tracking-[0.16em] text-[#E5C17B] font-bold">
+              ★ Valoraciones de usuarios
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1.5">
+              Miles de búsquedas resueltas en segundos
+            </h2>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="bg-[#0B0F1C]/60 border border-white/[0.06] p-6 rounded-2xl">
-              <span className="text-xs font-bold text-[#E5C17B] tracking-widest">01</span>
-              <h3 className="font-bold text-white text-base mt-2 mb-1.5">Para cada generación</h3>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Desde un detalle emotivo para tus abuelos hasta lo último para tus hijos, primos o amigos.
-              </p>
-            </div>
-            <div className="bg-[#0B0F1C]/60 border border-white/[0.06] p-6 rounded-2xl">
-              <span className="text-xs font-bold text-[#E5C17B] tracking-widest">02</span>
-              <h3 className="font-bold text-white text-base mt-2 mb-1.5">4 aciertos directos</h3>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Sin listas interminables: seleccionamos cuatro opciones reales dentro del presupuesto que marques.
-              </p>
-            </div>
-            <div className="bg-[#0B0F1C]/60 border border-white/[0.06] p-6 rounded-2xl">
-              <span className="text-xs font-bold text-[#E5C17B] tracking-widest">03</span>
-              <h3 className="font-bold text-white text-base mt-2 mb-1.5">Compra segura en Amazon</h3>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Compara precios, lee opiniones verificadas y recíbelo rápido en casa con garantía oficial.
-              </p>
-            </div>
+            {TESTIMONIOS.map((t, i) => (
+              <div
+                key={i}
+                className="p-6 rounded-3xl bg-[#0B0F1C] border border-white/[0.08] flex flex-col justify-between gap-4"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-[#E5C17B] text-sm tracking-wider">
+                      {'★'.repeat(t.estrellas)}
+                    </div>
+                    <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-[#E5C17B]/10 text-[#E5C17B] border border-[#E5C17B]/25">
+                      {t.etiqueta}
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    &ldquo;{t.texto}&rdquo;
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2.5 pt-3 border-t border-white/[0.06]">
+                  <div className="w-7 h-7 rounded-full bg-[#E5C17B]/20 text-[#E5C17B] flex items-center justify-center text-xs font-extrabold">
+                    {t.nombre[0].toUpperCase()}
+                  </div>
+                  <span className="text-xs font-bold text-white">{t.nombre}</span>
+                  <span className="text-[10px] text-emerald-400 ml-auto">✓ Uso verificado</span>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* FAQ COMPLETO TIPO ACORDEÓN */}
+        {/* PREGUNTAS FRECUENTES */}
         <section id="faq" className="max-w-3xl mx-auto px-4 sm:px-6 py-14 border-t border-white/[0.06] scroll-mt-20">
           <div className="text-center mb-8">
-            <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#E5C17B]">
-              Resolvemos tus dudas
+            <span className="text-[11px] uppercase tracking-[0.16em] text-[#E5C17B] font-bold">
+              Dudas habituales
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
-              Preguntas frecuentes
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1.5">
+              Preguntas Frecuentes
             </h2>
           </div>
 
@@ -990,26 +1345,18 @@ export default function Home() {
               return (
                 <div
                   key={idx}
-                  className={`rounded-2xl border transition ${
-                    abierta
-                      ? 'bg-[#0B0F1C] border-[#E5C17B]/35 shadow-lg'
-                      : 'bg-[#0B0F1C]/60 border-white/[0.07] hover:border-white/15'
-                  }`}
+                  className="rounded-2xl bg-[#0B0F1C] border border-white/[0.08] overflow-hidden"
                 >
                   <button
                     type="button"
                     onClick={() => setFaqAbierta(abierta ? -1 : idx)}
-                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 cursor-pointer"
+                    className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-white cursor-pointer"
                   >
-                    <span className="font-bold text-white text-sm sm:text-base leading-snug">
-                      {item.pregunta}
-                    </span>
-                    <span className={`text-lg font-bold transition-transform duration-200 shrink-0 ${abierta ? 'text-[#E5C17B] rotate-45' : 'text-slate-400'}`}>
-                      +
-                    </span>
+                    <span>{item.pregunta}</span>
+                    <span className="text-[#E5C17B] text-lg shrink-0">{abierta ? '−' : '+'}</span>
                   </button>
                   {abierta && (
-                    <div className="px-4 sm:px-5 pb-5 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-white/[0.05] mt-1 pt-3">
+                    <div className="px-5 pb-5 text-xs sm:text-sm text-slate-400 leading-relaxed border-t border-white/[0.05] pt-3">
                       {item.respuesta}
                     </div>
                   )}
@@ -1020,69 +1367,38 @@ export default function Home() {
         </section>
       </main>
 
-      {/* BOTÓN FLOTANTE "VOLVER ARRIBA / HOME" EN ESCRITORIO AL BAJAR */}
+      {/* FOOTER CON DIVULGACIÓN OBLIGATORIA DE AFILIADO DE AMAZON ESPAÑA */}
+      <footer className="relative z-10 border-t border-white/[0.08] bg-[#04060B] py-10 px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <LogoRMM size="sm" />
+            <div>
+              <p className="text-sm font-extrabold text-white">
+                Regalo<span className="text-[#E5C17B]">Ideal</span> RMM
+              </p>
+              <p className="text-[11px] text-slate-500">
+                Recomendador inteligente de regalos y compras • España
+              </p>
+            </div>
+          </div>
+
+          <p className="text-[11px] text-slate-500 text-center sm:text-right max-w-md leading-relaxed">
+            En calidad de Afiliado de Amazon, obtengo ingresos por las compras adscritas que cumplen los requisitos aplicables. Los precios y la disponibilidad pueden variar en Amazon.es.
+          </p>
+        </div>
+      </footer>
+
+      {/* BOTÓN FLOTANTE SUBIR ARRIBA */}
       {mostrarSubir && (
         <button
           type="button"
           onClick={() => volverAlInicio(false)}
-          title="Volver arriba al inicio"
-          className="hidden sm:flex fixed bottom-6 right-6 z-50 items-center gap-2 px-4 py-3 rounded-full bg-[#0B0F1C]/95 hover:bg-[#E5C17B] text-[#E5C17B] hover:text-[#05070E] border border-[#E5C17B]/40 shadow-[0_10px_35px_rgba(0,0,0,0.75)] backdrop-blur-xl font-bold text-xs uppercase tracking-wider transition cursor-pointer"
+          title="Volver arriba"
+          className="fixed bottom-5 right-5 z-50 w-11 h-11 rounded-full bg-gradient-to-r from-[#F7E3B5] to-[#D4AF37] text-[#05070E] font-extrabold shadow-[0_6px_25px_rgba(212,175,55,0.4)] hover:scale-105 transition flex items-center justify-center cursor-pointer"
         >
-          <span>↑</span>
-          <span>Home</span>
+          ↑
         </button>
       )}
-
-      {/* BARRA FLOTANTE INFERIOR ESTILO APP PARA MÓVIL (HOME SIEMPRE ACCESIBLE AL BAJAR) */}
-      <nav className="sm:hidden fixed bottom-3 left-3 right-3 z-50 backdrop-blur-2xl bg-[#0B0F1C]/95 border border-[#E5C17B]/30 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.9)] px-2 py-2 flex items-center justify-around">
-        <button
-          type="button"
-          onClick={() => volverAlInicio(false)}
-          className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-[#E5C17B] active:scale-95 transition cursor-pointer"
-        >
-          <span className="text-base leading-none">⌂</span>
-          <span className="text-[10px] font-bold tracking-wider uppercase">Home</span>
-        </button>
-
-        <a
-          href="#colecciones"
-          className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-300 hover:text-white transition"
-        >
-          <span className="text-base leading-none">✦</span>
-          <span className="text-[10px] font-medium tracking-wider uppercase">Familia</span>
-        </a>
-
-        <a
-          href={favoritos.length > 0 ? '#favoritos' : '#faq'}
-          className="relative flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-300 hover:text-white transition"
-        >
-          <span className="text-base leading-none">{favoritos.length > 0 ? '♥' : '?'}</span>
-          <span className="text-[10px] font-medium tracking-wider uppercase">
-            {favoritos.length > 0 ? `Guardados (${favoritos.length})` : 'Dudas'}
-          </span>
-        </a>
-
-        <button
-          type="button"
-          onClick={() => volverAlInicio(true)}
-          className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-300 hover:text-white active:scale-95 transition cursor-pointer"
-        >
-          <span className="text-base leading-none">↺</span>
-          <span className="text-[10px] font-medium tracking-wider uppercase">Nuevo</span>
-        </button>
-      </nav>
-
-      {/* FOOTER + FIRMA RAÚL MARTÍN MARTOS + AVISO LEGAL OBLIGATORIO AMAZON */}
-      <footer className="relative z-10 border-t border-white/[0.07] bg-[#03050A] py-12 px-4 text-center text-xs text-slate-500 space-y-3">
-        <div className="flex flex-col items-center justify-center gap-2">
-          <LogoRMM size="sm" />
-          <p className="text-slate-200 font-bold text-sm">RegaloIdeal · Raúl Martín Martos</p>
-        </div>
-        <p className="text-slate-400">© {new Date().getFullYear()} RMM Gift Concierge. Todos los derechos reservados.</p>
-        <p className="max-w-2xl mx-auto leading-relaxed text-slate-500">
-          En calidad de Afiliado de Amazon, obtengo ingresos por las compras adscritas que cumplen los requisitos aplicables. Los precios mostrados son orientativos y pueden variar en Amazon.
-        </p>
-      </footer>
     </div>
   );
 }
