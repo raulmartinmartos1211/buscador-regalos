@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="borderGold" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F7E3B5" />
+      <stop offset="50%" stop-color="#D4AF37" />
+      <stop offset="100%" stop-color="#7D5C19" />
+    </linearGradient>
+    <linearGradient id="goldText" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFF1CC" />
+      <stop offset="50%" stop-color="#E5C17B" />
+      <stop offset="100%" stop-color="#B8892D" />
+    </linearGradient>
+    <linearGradient id="smileGold" x1="12" y1="42" x2="52" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#D4AF37" />
+      <stop offset="55%" stop-color="#FFF0C2" />
+      <stop offset="100%" stop-color="#E59838" />
+    </linearGradient>
+  </defs>
+
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#070A13" stroke="url(#borderGold)" stroke-width="3.5" />
+  <path d="M32 7L33.8 11.8L38.6 13.6L33.8 15.4L32 20.2L30.2 15.4L25.4 13.6L30.2 11.8L32 7Z" fill="url(#goldText)" />
+  <text x="32" y="37" text-anchor="middle" fill="url(#goldText)" font-size="17" font-weight="900" font-family="system-ui, -apple-system, sans-serif" letter-spacing="1.2">
+    RMM
+  </text>
+  <path d="M14 45C23 52.5 41 52.5 50 44.5" stroke="url(#smileGold)" stroke-width="3.4" stroke-linecap="round" />
+  <path d="M45.5 42.8L51.2 44.1L49.4 49.6" stroke="url(#smileGold)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
