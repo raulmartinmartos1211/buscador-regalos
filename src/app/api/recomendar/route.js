@@ -17,6 +17,36 @@ export async function POST(request) {
       throw new Error('Falta configurar GROQ_API_KEY');
     }
 
+    // 1. Detectar automáticamente qué modelos tienes habilitados en tu cuenta de Groq
+    const modelsRes = await fetch('https://api.groq.com/openai/v1/models', {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    });
+    const modelsData = await modelsRes.json();
+
+    if (!modelsRes.ok) {
+      throw new Error(modelsData.error?.message || 'Clave de Groq inválida');
+    }
+
+    const disponibles = (modelsData.data || []).map((m) => m.id);
+    const modeloElegido =
+      disponibles.find((id) => id.includes('llama') && !id.includes('guard')) ||
+      disponibles.find(
+        (id) =>
+          (id.includes('qwen') || id.includes('gemma') || id.includes('gpt') || id.includes('mixtral')) &&
+          !id.includes('guard')
+      ) ||
+      disponibles.find(
+        (id) =>
+          !id.includes('whisper') &&
+          !id.includes('guard') &&
+          !id.includes('orpheus') &&
+          !id.includes('arabic')
+      );
+
+    if (!modeloElegido) {
+      throw new Error('No hay modelos activos en tu proyecto de Groq.');
+    }
+
     const prompt = `Actúa como un personal shopper experto en regalos de alto impacto y alta valoración en Amazon España.
 Recomienda exactamente 4 ideas de regalo distintas entre sí, concretas, comprables hoy mismo y ajustadas al presupuesto para:
 - Destinatario: ${destinatario}
@@ -42,29 +72,19 @@ Devuelve ÚNICAMENTE un JSON válido con esta estructura exacta:
   ]
 }`;
 
-    const consultarGroq = async (modelo) => {
-      return fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: modelo,
-          messages: [{ role: 'user', content: prompt }],
-          response_format: { type: 'json_object' },
-          temperature: 0.65,
-        }),
-      });
-    };
-
-    // Llamada directa al modelo principal de alta calidad (sin perder tiempo listando modelos)
-    let response = await consultarGroq('llama-3.3-70b-versatile');
-
-    // Respaldo automático si el modelo principal no estuviera disponible
-    if (!response.ok) {
-      response = await consultarGroq('llama-3.1-8b-instant');
-    }
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: modeloElegido,
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' },
+        temperature: 0.65,
+      }),
+    });
 
     const data = await response.json();
     if (!response.ok) {
