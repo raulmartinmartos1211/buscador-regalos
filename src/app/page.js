@@ -133,6 +133,49 @@ const PERFILES_PARA_MI = [
   },
 ];
 
+const IDEAS_SORPRENDEME = [
+  {
+    modo: 'regalo',
+    destinatario: 'Compañero de Amigo Invisible',
+    ocasion: 'Amigo Invisible',
+    estilo: 'Original y sorprendente',
+    presupuesto: '25',
+    intereses: 'Le encanta el café, trabajar en ordenador, los gadgets ingeniosos y los juegos rápidos con amigos',
+  },
+  {
+    modo: 'regalo',
+    destinatario: 'Mi madre',
+    ocasion: 'Navidad / Reyes',
+    estilo: 'Hogar & Decoración',
+    presupuesto: '65',
+    intereses: 'Disfruta relajándose en casa leyendo, con luz cálida, buen té y accesorios elegantes',
+  },
+  {
+    modo: 'personal',
+    destinatario: 'Mi escritorio y zona de estudio/trabajo',
+    ocasion: 'Uso diario / Productividad',
+    estilo: 'Tech & Setup',
+    presupuesto: '70',
+    intereses: 'Quiero mejorar la iluminación, el orden de cables y la comodidad frente al ordenador',
+  },
+  {
+    modo: 'regalo',
+    destinatario: 'Mi pareja',
+    ocasion: 'Navidad / Reyes',
+    estilo: 'Gourmet & Café',
+    presupuesto: '90',
+    intereses: 'Le apasiona la cocina creativa, el café de especialidad y los detalles con diseño minimalista',
+  },
+  {
+    modo: 'personal',
+    destinatario: 'Entrenar y cuidarme en casa o gimnasio',
+    ocasion: 'Deporte y salud',
+    estilo: 'Gym & Salud',
+    presupuesto: '60',
+    intereses: 'Busco accesorios prácticos para recuperación muscular, hidratación y rendimiento deportivo',
+  },
+];
+
 const OCASIONES_REGALO = ['Cumpleaños', 'Amigo Invisible', 'Navidad / Reyes', 'Aniversario', 'Detalle especial'];
 const OCASIONES_PARA_MI = ['Uso diario / Productividad', 'Capricho práctico', 'Renovar equipo', 'Hogar y confort', 'Deporte y salud'];
 
@@ -203,7 +246,7 @@ const COLECCIONES_DESTACADAS = [
     },
   },
   {
-    etiqueta: 'PARA MADRES & HOGAR',
+    etiqueta: 'NAVIDAD & REYES • PARA MADRES',
     titulo: 'Ritual de Calma, Café & Bienestar',
     rango: '35€ – 75€',
     descripcion: 'Difusores de aromas, cafeteras de especialidad, iluminación cálida y piezas acogedoras para casa.',
@@ -211,7 +254,7 @@ const COLECCIONES_DESTACADAS = [
     perfil: {
       modo: 'regalo',
       destinatario: 'Mi madre',
-      ocasion: 'Cumpleaños',
+      ocasion: 'Navidad / Reyes',
       estilo: 'Hogar & Decoración',
       presupuesto: '65',
       intereses: 'Decoración cálida, aromaterapia, lectura tranquila, té o café de especialidad y bienestar personal',
@@ -226,7 +269,7 @@ const COLECCIONES_DESTACADAS = [
     perfil: {
       modo: 'regalo',
       destinatario: 'Mi padre',
-      ocasion: 'Cumpleaños',
+      ocasion: 'Navidad / Reyes',
       estilo: 'Gourmet & Café',
       presupuesto: '80',
       intereses: 'Buen café por la mañana, accesorios de vino o cocina, herramientas prácticas y gadgets duraderos',
@@ -264,12 +307,12 @@ const PREGUNTAS_FRECUENTES = [
   {
     pregunta: '¿Cómo funciona el modo "Comprar para mí"?',
     respuesta:
-      'Además de buscar regalos para otras personas, puedes activar el modo "Comprar para mí" para decirle a la IA qué necesitas mejorar (tu escritorio, tu cocina, el gimnasio, un viaje...) y tu presupuesto máximo. Te filtrará 4 opciones con alta relación calidad-precio.',
+      'Además de buscar regalos para otras personas, puedes activar el modo "Comprar para mí" para decirle a la IA qué necesitas mejorar (tu escritorio, tu cocina, el gimnasio, un viaje...) y tu presupuesto máximo. Te filtrará 4 opciones con alta relación calidad-precio y 4 estrellas o más.',
   },
   {
     pregunta: '¿Dónde se realiza la compra y el envío?',
     respuesta:
-      'Al pulsar en "Ver en Amazon", te llevamos directamente a Amazon España para que veas fotos reales, reseñas verificadas de compradores y disfrutes de envío rápido Prime y devolución oficial.',
+      'Al pulsar en "Ver en Amazon", te llevamos directamente a Amazon España filtrado por productos mejor valorados para que veas fotos reales, reseñas verificadas y disfrutes de envío rápido Prime y devolución oficial.',
   },
   {
     pregunta: '¿Se guardan mis favoritos si cierro la página?',
@@ -278,8 +321,6 @@ const PREGUNTAS_FRECUENTES = [
   },
 ];
 
-// Diccionario de imágenes específicas por palabra clave exacta en el título/descripción.
-// Si ningún término encaja con precisión, devuelve imagen: null y se muestra el Logo RMM dorado.
 const BANCO_FOTOS_EXACTAS = [
   {
     claves: ['cafetera', 'café', 'cafe', 'espresso', 'espumador', 'molinillo'],
@@ -394,7 +435,6 @@ const BANCO_FOTOS_EXACTAS = [
 ];
 
 function obtenerVisualProducto(titulo = '', descripcion = '') {
-  // Priorizamos coincidencia exacta en el título primero, y si no, en la descripción
   const tituloLower = titulo.toLowerCase();
   const descLower = descripcion.toLowerCase();
 
@@ -410,7 +450,6 @@ function obtenerVisualProducto(titulo = '', descripcion = '') {
     }
   }
 
-  // Si no hay foto exacta que corresponda al título, devolvemos null para mostrar el Logo RMM oficial
   return { imagen: null, categoria: 'Selección RMM' };
 }
 
@@ -487,7 +526,7 @@ function MiniaturaTarjeta({ titulo, descripcion }) {
 }
 
 export default function Home() {
-  const [modo, setModo] = useState('regalo'); // 'regalo' | 'personal'
+  const [modo, setModo] = useState('regalo');
   const [destinatario, setDestinatario] = useState('');
   const [ocasion, setOcasion] = useState('Cumpleaños');
   const [estilo, setEstilo] = useState('Práctico y útil');
@@ -495,13 +534,13 @@ export default function Home() {
   const [intereses, setIntereses] = useState('');
   const [perfilActivo, setPerfilActivo] = useState('');
 
-  // Desplegable de filtros avanzados
   const [mostrarFiltrosPro, setMostrarFiltrosPro] = useState(false);
   const [prioridad, setPrioridad] = useState('equilibrado');
   const [evitar, setEvitar] = useState('');
 
   const [regalos, setRegalos] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
+  const [historial, setHistorial] = useState([]);
   const [cargando, setCargando] = useState(false);
   const [copiado, setCopiado] = useState(null);
   const [faqAbierta, setFaqAbierta] = useState(0);
@@ -512,9 +551,9 @@ export default function Home() {
   useEffect(() => {
     try {
       const guardados = localStorage.getItem('rmm_regalos_favoritos');
-      if (guardados) {
-        setFavoritos(JSON.parse(guardados));
-      }
+      if (guardados) setFavoritos(JSON.parse(guardados));
+      const hist = localStorage.getItem('rmm_regalos_historial');
+      if (hist) setHistorial(JSON.parse(hist));
     } catch (e) {}
   }, []);
 
@@ -557,6 +596,14 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const guardarEnHistorial = (entrada) => {
+    try {
+      const nuevo = [entrada, ...historial.filter((h) => h.destinatario !== entrada.destinatario)].slice(0, 3);
+      setHistorial(nuevo);
+      localStorage.setItem('rmm_regalos_historial', JSON.stringify(nuevo));
+    } catch (e) {}
+  };
+
   const ejecutarBusqueda = async (datos = null) => {
     const modoActual = datos?.modo || modo;
     const dest = datos ? datos.destinatario : destinatario;
@@ -596,6 +643,14 @@ export default function Home() {
       const data = await res.json();
       if (data.regalos) {
         setRegalos(data.regalos);
+        guardarEnHistorial({
+          modo: modoActual,
+          destinatario: dest,
+          ocasion: ocas,
+          estilo: est,
+          presupuesto: pres,
+          intereses: inter,
+        });
       } else if (data.error) {
         alert('Error: ' + data.error);
       }
@@ -609,6 +664,18 @@ export default function Home() {
   const handleSubmit = (e) => {
     e.preventDefault();
     ejecutarBusqueda();
+  };
+
+  const sorprenderEnUnClic = () => {
+    const aleatoria = IDEAS_SORPRENDEME[Math.floor(Math.random() * IDEAS_SORPRENDEME.length)];
+    setModo(aleatoria.modo);
+    setPerfilActivo('');
+    setDestinatario(aleatoria.destinatario);
+    setOcasion(aleatoria.ocasion);
+    setEstilo(aleatoria.estilo);
+    setPresupuesto(aleatoria.presupuesto);
+    setIntereses(aleatoria.intereses);
+    ejecutarBusqueda(aleatoria);
   };
 
   const seleccionarPerfilRapido = (p) => {
@@ -640,7 +707,6 @@ export default function Home() {
     }
   };
 
-  // Compartir 100% legal según normativa Amazon Associates (enlace a tu dominio propio)
   const compartirRegalo = (regalo, id) => {
     const texto = `Mira esta idea que he encontrado en RegaloIdeal 🎁:\n*${regalo.titulo}* (${regalo.precioEstimado})\n${regalo.descripcion}\n\nDescúbrelo y busca más ideas aquí 👉 ${URL_WEB}`;
     navigator.clipboard.writeText(texto);
@@ -677,10 +743,10 @@ export default function Home() {
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-[#9E7B3A]/[0.06] blur-[140px]" />
       </div>
 
-      {/* BARRA SUPERIOR */}
-      <div className="relative z-20 bg-[#0A0E1A] border-b border-[#E5C17B]/15 py-1.5 px-4 text-center">
-        <p className="text-[10px] sm:text-xs tracking-[0.16em] uppercase text-[#E5C17B]/90 font-medium">
-          RMM Smart Concierge • Buscador con IA para Regalos & Compras en Amazon España
+      {/* BARRA SUPERIOR DE TEMPORADA */}
+      <div className="relative z-20 bg-gradient-to-r from-[#0A0E1A] via-[#13192D] to-[#0A0E1A] border-b border-[#E5C17B]/20 py-1.5 px-4 text-center">
+        <p className="text-[10px] sm:text-xs tracking-[0.14em] uppercase text-[#F7E3B5] font-semibold">
+          ⚡ Especial Black Friday & Navidad • Ideas 4★+ con envío rápido en Amazon España
         </p>
       </div>
 
@@ -745,34 +811,45 @@ export default function Home() {
       </header>
 
       <main className="relative z-10 flex-1">
-        {/* HERO + SELECTOR DUAL REGALO / PARA MÍ */}
+        {/* HERO + SELECTOR DUAL + BOTÓN SORPRÉNDEME */}
         <section id="buscador" className="max-w-4xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12 pb-14">
           <div className="text-center max-w-2xl mx-auto mb-7 sm:mb-9">
-            {/* SWITCH DUAL DE MODO */}
-            <div className="inline-flex p-1 rounded-2xl bg-[#0B0F1C] border border-[#E5C17B]/25 shadow-lg mb-5">
+            <div className="flex flex-wrap items-center justify-center gap-2.5 mb-5">
+              <div className="inline-flex p-1 rounded-2xl bg-[#0B0F1C] border border-[#E5C17B]/25 shadow-lg">
+                <button
+                  type="button"
+                  onClick={() => cambiarModo('regalo')}
+                  className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
+                    modo === 'regalo'
+                      ? 'bg-gradient-to-r from-[#F7E3B5] to-[#D4AF37] text-[#05070E] shadow-[0_4px_20px_rgba(212,175,55,0.28)]'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <span>🎁</span>
+                  <span>Buscar Regalo</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => cambiarModo('personal')}
+                  className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
+                    modo === 'personal'
+                      ? 'bg-gradient-to-r from-[#F7E3B5] to-[#D4AF37] text-[#05070E] shadow-[0_4px_20px_rgba(212,175,55,0.28)]'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <span>🛍️</span>
+                  <span>Comprar para mí</span>
+                </button>
+              </div>
+
               <button
                 type="button"
-                onClick={() => cambiarModo('regalo')}
-                className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
-                  modo === 'regalo'
-                    ? 'bg-gradient-to-r from-[#F7E3B5] to-[#D4AF37] text-[#05070E] shadow-[0_4px_20px_rgba(212,175,55,0.28)]'
-                    : 'text-slate-400 hover:text-white'
-                }`}
+                onClick={sorprenderEnUnClic}
+                disabled={cargando}
+                className="flex items-center gap-1.5 px-4 py-3 rounded-2xl bg-white/[0.04] hover:bg-[#E5C17B]/15 border border-[#E5C17B]/35 text-[#F7E3B5] text-xs font-extrabold transition cursor-pointer"
               >
-                <span>🎁</span>
-                <span>Buscar Regalo</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => cambiarModo('personal')}
-                className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
-                  modo === 'personal'
-                    ? 'bg-gradient-to-r from-[#F7E3B5] to-[#D4AF37] text-[#05070E] shadow-[0_4px_20px_rgba(212,175,55,0.28)]'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <span>🛍️</span>
-                <span>Comprar para mí</span>
+                <span>🎲</span>
+                <span>Sorpréndeme</span>
               </button>
             </div>
 
@@ -796,8 +873,8 @@ export default function Home() {
 
             <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
               {modo === 'regalo'
-                ? 'Indica para quién es, sus gustos y tu presupuesto. Nuestra IA selecciona 4 regalos top disponibles en Amazon España.'
-                : 'Dinos qué necesitas, para qué lo vas a usar y cuánto quieres gastar. Filtramos 4 opciones calidad-precio en Amazon España.'}
+                ? 'Indica para quién es, sus gustos y tu presupuesto. Nuestra IA filtra 4 regalos top valorados (4★+) en Amazon España.'
+                : 'Dinos qué necesitas, para qué lo vas a usar y cuánto quieres gastar. Seleccionamos 4 opciones calidad-precio en Amazon España.'}
             </p>
           </div>
 
@@ -860,7 +937,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Categoría / Enfoque ampliado (10 opciones) */}
+            {/* Categoría ampliada */}
             <div>
               <label className="block text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400 mb-2.5">
                 {modo === 'regalo' ? '2. Categoría / Enfoque del regalo' : '2. Categoría del producto'}
@@ -1025,11 +1102,28 @@ export default function Home() {
               className="w-full py-4 rounded-2xl font-extrabold text-sm sm:text-base uppercase tracking-wider bg-gradient-to-r from-[#F7E3B5] via-[#E5C17B] to-[#C69749] text-[#05070E] hover:brightness-110 active:scale-[0.99] transition shadow-[0_10px_35px_rgba(212,175,55,0.28)] disabled:opacity-50 cursor-pointer"
             >
               {cargando
-                ? '✦ Analizando catálogo de Amazon...'
+                ? '✦ Seleccionando productos 4★+ en Amazon...'
                 : modo === 'regalo'
                 ? 'Revelar 4 Ideas Exclusivas →'
                 : 'Encontrar Mis 4 Mejores Opciones →'}
             </button>
+
+            {/* HISTORIAL RECIENTE EN 1 CLIC */}
+            {historial.length > 0 && (
+              <div className="pt-2 flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
+                <span>Recientes:</span>
+                {historial.map((h, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => probarColeccion(h)}
+                    className="px-2.5 py-1 rounded-lg bg-white/[0.03] hover:bg-[#E5C17B]/15 text-slate-300 hover:text-[#F7E3B5] border border-white/[0.07] transition cursor-pointer"
+                  >
+                    ↻ {h.destinatario} ({h.presupuesto}€)
+                  </button>
+                ))}
+              </div>
+            )}
           </form>
 
           {/* ZONA DE RESULTADOS */}
@@ -1060,10 +1154,10 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-4 border-b border-white/10">
                   <div>
                     <span className="text-[11px] uppercase tracking-[0.16em] text-[#E5C17B] font-bold">
-                      ✦ Selección personalizada lista
+                      ✦ Filtrado por valoración 4★+ en Amazon.es
                     </span>
                     <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
-                      4 Opciones Top en Amazon España
+                      4 Opciones Top para Ti
                     </h2>
                   </div>
 
@@ -1092,7 +1186,6 @@ export default function Home() {
                         }`}
                       >
                         <div>
-                          {/* Cabecera con Foto Exacta al Título o Logo RMM Dorado */}
                           <div className="flex items-start gap-3.5 mb-4">
                             <MiniaturaTarjeta
                               titulo={regalo.titulo}
@@ -1102,7 +1195,9 @@ export default function Home() {
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between gap-2 mb-1">
                                 <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#E5C17B] truncate">
-                                  {esDestacado ? '✦ Elección Destacada' : `#${idx + 1} • ${visual.categoria}`}
+                                  {esDestacado
+                                    ? '✦ Elección Destacada'
+                                    : regalo.porQueDestaca || `#${idx + 1} • ${visual.categoria}`}
                                 </span>
                                 <span className="shrink-0 text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
                                   {regalo.precioEstimado}
@@ -1120,10 +1215,10 @@ export default function Home() {
                           </p>
                         </div>
 
-                        <div className="pt-3 border-t border-white/[0.06] space-y-3">
+                        <div className="pt-3 border-t border-white/[0.06] space-y-2.5">
                           <div className="flex items-center justify-between text-[11px] text-slate-400">
-                            <span className="text-emerald-400 font-medium">✓ Disponible en Amazon.es</span>
-                            <span>Ajustado a ≤ {presupuesto}€</span>
+                            <span className="text-emerald-400 font-medium">★ Filtro 4+ estrellas Amazon</span>
+                            <span>Presupuesto ≤ {presupuesto}€</span>
                           </div>
 
                           <div className="flex items-center gap-2">
@@ -1133,7 +1228,7 @@ export default function Home() {
                               rel="noopener noreferrer nofollow sponsored"
                               className="flex-1 py-3 px-4 rounded-xl font-extrabold text-xs sm:text-sm text-center bg-gradient-to-r from-[#F7E3B5] via-[#E5C17B] to-[#C69749] text-[#05070E] hover:brightness-110 transition shadow-[0_6px_20px_rgba(212,175,55,0.22)]"
                             >
-                              Ver en Amazon →
+                              Ver mejor opción →
                             </a>
 
                             <button
@@ -1166,6 +1261,18 @@ export default function Home() {
                             >
                               {copiado === idx ? '✓' : '📋'}
                             </button>
+                          </div>
+
+                          {/* Segundo enlace monetizado para comparar modelos y ofertas */}
+                          <div className="text-center pt-0.5">
+                            <a
+                              href={regalo.urlComparar || regalo.urlAmazon}
+                              target="_blank"
+                              rel="noopener noreferrer nofollow sponsored"
+                              className="inline-block text-[11px] text-slate-400 hover:text-[#E5C17B] underline decoration-white/20 hover:decoration-[#E5C17B] transition"
+                            >
+                              Comparar modelos, precios y ofertas en Amazon.es
+                            </a>
                           </div>
                         </div>
                       </article>
@@ -1285,7 +1392,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* OPINIONES / PRUEBA SOCIAL */}
+        {/* OPINIONES */}
         <section id="opiniones" className="max-w-5xl mx-auto px-4 sm:px-6 py-14 border-t border-white/[0.06] scroll-mt-20">
           <div className="text-center max-w-xl mx-auto mb-10">
             <span className="text-[11px] uppercase tracking-[0.16em] text-[#E5C17B] font-bold">
