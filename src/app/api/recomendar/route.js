@@ -1,59 +1,70 @@
 import { NextResponse } from 'next/server';
 
+function limpiarBusquedaAmazon(texto = '') {
+  return texto
+    .replace(/\b(amazon(\.es)?|comprar|online|espa[ñn]a|regalo(s)?\s+para)\b/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export async function POST(request) {
   try {
     const { destinatario, presupuesto, intereses } = await request.json();
-    const tag = process.env.AMAZON_TAG || 'pruebaregalos-21';
+    const tag = process.env.AMAZON_TAG || 'raulmartin04-21';
     const apiKey = process.env.GROQ_API_KEY;
 
-    // 1. Consultar qué modelos tienes activos en tu cuenta de Groq
-    const modelsRes = await fetch('https://api.groq.com/openai/v1/models', {
-      headers: { 'Authorization': `Bearer ${apiKey}` },
-    });
-    const modelsData = await modelsRes.json();
-
-    if (!modelsRes.ok) {
-      throw new Error(modelsData.error?.message || 'Clave de Groq inválida');
+    if (!apiKey) {
+      throw new Error('Falta configurar GROQ_API_KEY');
     }
 
-    // 2. Elegir un modelo de texto válido
-    const disponibles = (modelsData.data || []).map((m) => m.id);
-    console.log('Modelos activos en tu cuenta:', disponibles);
+    const prompt = `Actúa como un personal shopper experto en regalos de alto impacto y alta valoración en Amazon España.
+Recomienda exactamente 4 ideas de regalo distintas entre sí, concretas, comprables hoy mismo y ajustadas al presupuesto para:
+- Destinatario: ${destinatario}
+- Presupuesto máximo: ${presupuesto}€
+- Contexto y gustos: ${intereses}
 
-const modeloElegido =
-  disponibles.find((id) => id.includes('llama') && !id.includes('guard')) ||
-  disponibles.find((id) => (id.includes('qwen') || id.includes('gemma') || id.includes('gpt') || id.includes('mixtral')) && !id.includes('guard')) ||
-  disponibles.find((id) => !id.includes('whisper') && !id.includes('guard') && !id.includes('orpheus') && !id.includes('arabic'));
+Reglas estrictas para maximizar acierto y conversión:
+1. Cada propuesta debe ser un producto físico real y específico (nunca tarjetas regalo, suscripciones ni experiencias abstractas).
+2. Ajusta el precio estimado de cada producto para que esté dentro o ligeramente por debajo de ${presupuesto}€.
+3. En "busquedaAmazon" escribe SOLO 3 a 5 palabras clave limpias del producto en español (ejemplo: "cafetera italiana acero inoxidable", "marco fotos digital wifi"). NUNCA incluyas las palabras "amazon", "comprar" ni "regalo".
+4. En "titulo" pon un nombre atractivo y elegante (máximo 55 caracteres).
+5. En "descripcion" explica en 2 frases cortas por qué encaja con esa persona y qué problema o deseo resuelve.
 
-    if (!modeloElegido) {
-      throw new Error('No hay modelos activos en tu proyecto de Groq. Actívalos en console.groq.com/settings/limits');
+Devuelve ÚNICAMENTE un JSON válido con esta estructura exacta:
+{
+  "regalos": [
+    {
+      "titulo": "Nombre del producto",
+      "descripcion": "Explicación persuasiva y cercana.",
+      "precioEstimado": "~45€",
+      "busquedaAmazon": "palabras clave limpias"
     }
+  ]
+}`;
 
-    const prompt = `Actúa como un experto asesor de compras y regalos.
-    Recomienda exactamente 4 ideas de regalo originales, concretas y fáciles de encontrar en Amazon España para:
-    - Persona: ${destinatario}
-    - Presupuesto máximo aproximado: ${presupuesto}€
-    - Gustos o detalles: ${intereses}
+    const consultarGroq = async (modelo) => {
+      return fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: modelo,
+          messages: [{ role: 'user', content: prompt }],
+          response_format: { type: 'json_object' },
+          temperature: 0.65,
+        }),
+      });
+    };
 
-    Devuelve ÚNICAMENTE un objeto JSON válido con la clave "regalos" que contenga un array de 4 objetos con estas claves exactas:
-    "titulo" (nombre atractivo del regalo),
-    "descripcion" (por qué le va a encantar, máximo 2 frases),
-    "precioEstimado" (ej: "~35€"),
-    "busquedaAmazon" (palabras clave exactas para buscar ese producto en Amazon).`;
+    // Llamada directa al modelo principal de alta calidad (sin perder tiempo listando modelos)
+    let response = await consultarGroq('llama-3.3-70b-versatile');
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: modeloElegido,
-        messages: [{ role: 'user', content: prompt }],
-        response_format: { type: 'json_object' },
-        temperature: 0.7,
-      }),
-    });
+    // Respaldo automático si el modelo principal no estuviera disponible
+    if (!response.ok) {
+      response = await consultarGroq('llama-3.1-8b-instant');
+    }
 
     const data = await response.json();
     if (!response.ok) {
@@ -61,12 +72,16 @@ const modeloElegido =
     }
 
     const parsed = JSON.parse(data.choices[0].message.content);
-    const lista = Array.isArray(parsed) ? parsed : (parsed.regalos || Object.values(parsed)[0]);
+    const lista = Array.isArray(parsed) ? parsed : parsed.regalos || Object.values(parsed)[0];
 
-    const regalos = lista.map((item) => ({
-      ...item,
-      urlAmazon: `https://www.amazon.es/s?k=${encodeURIComponent(item.busquedaAmazon)}&tag=${tag}`,
-    }));
+    const regalos = (lista || []).slice(0, 4).map((item) => {
+      const queryLimpia = limpiarBusquedaAmazon(item.busquedaAmazon || item.titulo);
+      return {
+        ...item,
+        busquedaAmazon: queryLimpia,
+        urlAmazon: `https://www.amazon.es/s?k=${encodeURIComponent(queryLimpia)}&tag=${tag}`,
+      };
+    });
 
     return NextResponse.json({ regalos });
   } catch (error) {
